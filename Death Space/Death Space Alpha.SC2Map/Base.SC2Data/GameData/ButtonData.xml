@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CButton id="SpaceShipMoveUp">
+        <Icon value="Assets\Textures\btn-border-queue-trainingslot01.dds"/>
+        <AlertIcon value="Assets\Textures\btn-border-queue-trainingslot01.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <Universal value="1"/>
+    </CButton>
+</Catalog>

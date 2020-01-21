@@ -1,0 +1,263 @@
+//==================================================================================================
+// 
+// Generated Map Script
+// 
+// Name:   Just Another StarCraft II Map
+// 
+//==================================================================================================
+include "TriggerLibs/NativeLib"
+
+//--------------------------------------------------------------------------------------------------
+// Library: Movement Libs
+//--------------------------------------------------------------------------------------------------
+// Variable Declarations
+int[17] libWASD_gv_wASDState;
+unit[17] libWASD_gv_controlledUnits;
+
+// Function Declarations
+fixed libWASD_gf_GetWASDAngle (int lp_player);
+void libWASD_gf_ProcessMovement (int lp_player);
+void libWASD_gf_KeyDownCheck (int lp_player, int lp_keyPressed);
+void libWASD_gf_KeyUpCheck (int lp_player, int lp_keyPressed);
+void libWASD_gf_SetControlledUnit (int lp_player, unit lp_unit);
+
+// Library Initialization
+void libWASD_InitVariables ();
+
+//--------------------------------------------------------------------------------------------------
+// Library: Movement Libs
+//--------------------------------------------------------------------------------------------------
+// External Library Initialization
+void libWASD_InitLibraries () {
+    libNtve_InitVariables();
+}
+
+// Variable Initialization
+bool libWASD_InitVariables_completed = false;
+
+void libWASD_InitVariables () {
+    if (libWASD_InitVariables_completed) {
+        return;
+    }
+
+    libWASD_InitVariables_completed = true;
+
+}
+
+// Functions
+fixed libWASD_gf_GetWASDAngle (int lp_player) {
+    // Variable Declarations
+    int lv_tempBits;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+
+    // Implementation
+    lv_tempBits = libWASD_gv_wASDState[lp_player]&0x0001;
+    if(lv_tempBits == 0x0001) {
+    	lv_tempBits = libWASD_gv_wASDState[lp_player]&0x1010;
+    	if(lv_tempBits == 0x0000)      { return 0.0; }   // W
+    	else if(lv_tempBits == 0x1000) { return 315.0; } // W+D
+    	else                           { return 45.0; }  // W+A or W+A+D
+    } else {
+    	lv_tempBits = libWASD_gv_wASDState[lp_player]&0x1110;
+    	if     (lv_tempBits == 0x0100) { return 180.0; } // S
+    	else if(lv_tempBits == 0x1100) { return 225.0; } // S+D
+    	else if(lv_tempBits == 0x1000) { return 270.0; } // D
+    	else if(lv_tempBits == 0x0010) { return 90.0; }  // A
+    	else if(lv_tempBits == 0x1010) { return 90.0; }  // A + D
+    	else if(lv_tempBits == 0x0000) { return 0.0; }   // None
+    	else                           { return 135.0; } // S+A or S+A+D
+    }
+}
+
+trigger auto_libWASD_gf_ProcessMovement_Trigger = null;
+int auto_libWASD_gf_ProcessMovement_lp_player;
+
+void libWASD_gf_ProcessMovement (int lp_player) {
+    auto_libWASD_gf_ProcessMovement_lp_player = lp_player;
+
+    if (auto_libWASD_gf_ProcessMovement_Trigger == null) {
+        auto_libWASD_gf_ProcessMovement_Trigger = TriggerCreate("auto_libWASD_gf_ProcessMovement_TriggerFunc");
+    }
+
+    TriggerExecute(auto_libWASD_gf_ProcessMovement_Trigger, false, false);
+}
+
+bool auto_libWASD_gf_ProcessMovement_TriggerFunc (bool testConds, bool runActions) {
+    int lp_player = auto_libWASD_gf_ProcessMovement_lp_player;
+
+    // Variable Declarations
+    unit lv_targetUnit;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+
+    // Implementation
+    lv_targetUnit = libWASD_gv_controlledUnits[lp_player];
+    while (libWASD_gv_wASDState[lp_player] != 0x0000) {
+        UnitIssueOrder(
+            lv_targetUnit, 
+            OrderTargetingPoint(
+                AbilityCommand("move", 0), 
+                PointWithOffsetPolar(UnitGetPosition(lv_targetUnit), 0.3, libWASD_gf_GetWASDAngle(lp_player) + CameraGetYaw(lp_player))
+                ), 
+            c_orderQueueReplace
+        );
+        Wait(0.0, c_timeGame);
+    }
+    return true;
+}
+
+void libWASD_gf_KeyDownCheck (int lp_player, int lp_keyPressed) {
+    // Variable Declarations
+    bool lv_originallyMoving;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+
+    // Implementation
+    if(libWASD_gv_wASDState[lp_player] != 0x0000) {
+        lv_originallyMoving = true;
+    }
+    if (lp_keyPressed == c_keyW) {
+        libWASD_gv_wASDState[lp_player] |= 0x0001;
+    } else if (lp_keyPressed == c_keyA) {
+        libWASD_gv_wASDState[lp_player] |= 0x0010;
+    } else if (lp_keyPressed == c_keyS) {
+        libWASD_gv_wASDState[lp_player] |= 0x0100;
+    } else if (lp_keyPressed == c_keyD) {
+        libWASD_gv_wASDState[lp_player] |= 0x1000;
+    }
+    if(!lv_originallyMoving) {
+        libWASD_gf_ProcessMovement(lp_player);
+    }
+}
+
+void libWASD_gf_KeyUpCheck (int lp_player, int lp_keyPressed) {
+    // Automatic Variable Declarations
+    // Implementation
+    if (lp_keyPressed == c_keyW) {
+        libWASD_gv_wASDState[lp_player] ^= 0x0001;
+    } else if (lp_keyPressed == c_keyA) {
+        libWASD_gv_wASDState[lp_player] ^= 0x0010;
+    } else if (lp_keyPressed == c_keyS) {
+        libWASD_gv_wASDState[lp_player] ^= 0x0100;
+    } else if (lp_keyPressed == c_keyD) {
+        libWASD_gv_wASDState[lp_player] ^= 0x1000;
+    }
+}
+
+void libWASD_gf_SetControlledUnit (int lp_player, unit lp_unit) {
+    // Automatic Variable Declarations
+    // Implementation
+    libWASD_gv_controlledUnits[lp_player] = lp_unit;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Library Initialization
+//--------------------------------------------------------------------------------------------------
+bool libWASD_InitLib_completed = false;
+
+void libWASD_InitLib () {
+    if (libWASD_InitLib_completed) {
+        return;
+    }
+
+    libWASD_InitLib_completed = true;
+
+    libWASD_InitLibraries();
+    libWASD_InitVariables();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Library Initialization
+//--------------------------------------------------------------------------------------------------
+void InitLibs () {
+    libNtve_InitLib();
+    libWASD_InitLib();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger Variables
+//--------------------------------------------------------------------------------------------------
+trigger gt_Init;
+trigger gt_KeyDown;
+trigger gt_KeyUp;
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Init
+//--------------------------------------------------------------------------------------------------
+bool gt_Init_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libWASD_gf_SetControlledUnit(1, UnitFromId(2075027713));
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Init_Init () {
+    gt_Init = TriggerCreate("gt_Init_Func");
+    TriggerAddEventMapInit(gt_Init);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Key Down
+//--------------------------------------------------------------------------------------------------
+bool gt_KeyDown_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libWASD_gf_KeyDownCheck(EventPlayer(), EventKeyPressed());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_KeyDown_Init () {
+    gt_KeyDown = TriggerCreate("gt_KeyDown_Func");
+    TriggerAddEventKeyPressed(gt_KeyDown, c_playerAny, c_keyNone, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Key Up
+//--------------------------------------------------------------------------------------------------
+bool gt_KeyUp_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libWASD_gf_KeyUpCheck(EventPlayer(), EventKeyPressed());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_KeyUp_Init () {
+    gt_KeyUp = TriggerCreate("gt_KeyUp_Func");
+    TriggerAddEventKeyPressed(gt_KeyUp, c_playerAny, c_keyNone, false, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger Initialization
+//--------------------------------------------------------------------------------------------------
+void InitTriggers () {
+    gt_Init_Init();
+    gt_KeyDown_Init();
+    gt_KeyUp_Init();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Map Initialization
+//--------------------------------------------------------------------------------------------------
+void InitMap () {
+    InitLibs();
+    InitTriggers();
+}

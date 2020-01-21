@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TriggerData>
+    <Library Id="WASD">
+        <Root>
+            <Item Type="Comment" Library="WASD" Id="12A3E03C"/>
+            <Item Type="Comment" Library="WASD" Id="7834BE8C"/>
+            <Item Type="Comment" Library="WASD" Id="6C811730"/>
+            <Item Type="Category" Library="WASD" Id="C7E74D76"/>
+            <Item Type="Category" Library="WASD" Id="B8368BC4"/>
+            <Item Type="FunctionDef" Library="WASD" Id="BD8093AD"/>
+            <Item Type="FunctionDef" Library="WASD" Id="66E93053"/>
+            <Item Type="FunctionDef" Library="WASD" Id="88805EB3"/>
+        </Root>
+        <Element Type="Comment" Id="12A3E03C">
+            <Comment>
+                WASD Movement Library by rrowland @ sc2mapster.com
+            </Comment>
+        </Element>
+        <Element Type="Comment" Id="7834BE8C">
+            <Comment>
+                Under LGPL 3.0 License
+            </Comment>
+        </Element>
+        <Element Type="Comment" Id="6C811730">
+            <Comment>
+                IMPORTANT: Change Library ID to &apos;WASD&apos; or you will get syntax errors.
+            </Comment>
+        </Element>
+        <Element Type="Category" Id="C7E74D76">
+            <Item Type="FunctionDef" Library="WASD" Id="FF218B5F"/>
+            <Item Type="FunctionDef" Library="WASD" Id="6168E957"/>
+        </Element>
+        <Element Type="FunctionDef" Id="FF218B5F">
+            <Internal/>
+            <FlagCall/>
+            <ReturnType>
+                <Type Value="fixed"/>
+            </ReturnType>
+            <Parameter Type="ParamDef" Library="WASD" Id="97307853"/>
+            <Variable Type="Variable" Library="WASD" Id="14C003A4"/>
+            <FunctionCall Type="FunctionCall" Library="WASD" Id="2FBC8172"/>
+        </Element>
+        <Element Type="ParamDef" Id="97307853">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="WASD" Id="F4D80253"/>
+        </Element>
+        <Element Type="Param" Id="F4D80253">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Variable" Id="14C003A4">
+            <VariableType>
+                <Type Value="int"/>
+            </VariableType>
+            <Value Type="Param" Library="WASD" Id="C8A89C70"/>
+        </Element>
+        <Element Type="Param" Id="C8A89C70">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="2FBC8172">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000123"/>
+            <ScriptCode>
+                lv_tempBits = libWASD_gv_wASDState[lp_player]&amp;0x0001;
+                if(lv_tempBits == 0x0001) {
+                	lv_tempBits = libWASD_gv_wASDState[lp_player]&amp;0x1010;
+                	if(lv_tempBits == 0x0000)      { return 0.0; }   // W
+                	else if(lv_tempBits == 0x1000) { return 315.0; } // W+D
+                	else                           { return 45.0; }  // W+A or W+A+D
+                } else {
+                	lv_tempBits = libWASD_gv_wASDState[lp_player]&amp;0x1110;
+                	if     (lv_tempBits == 0x0100) { return 180.0; } // S
+                	else if(lv_tempBits == 0x1100) { return 225.0; } // S+D
+                	else if(lv_tempBits == 0x1000) { return 270.0; } // D
+                	else if(lv_tempBits == 0x0010) { return 90.0; }  // A
+                	else if(lv_tempBits == 0x1010) { return 90.0; }  // A + D
+                	else if(lv_tempBits == 0x0000) { return 0.0; }   // None
+                	else                           { return 135.0; } // S+A or S+A+D
+                }
+            </ScriptCode>
+        </Element>
+        <Element Type="FunctionDef" Id="6168E957">
+            <Internal/>
+            <FlagAction/>
+            <FlagCreateThread/>
+            <Parameter Type="ParamDef" Library="WASD" Id="9DEBCDB9"/>
+            <Variable Type="Variable" Library="WASD" Id="132A7F6B"/>
+            <FunctionCall Type="FunctionCall" Library="WASD" Id="4E7B54AE"/>
+        </Element>
+        <Element Type="ParamDef" Id="9DEBCDB9">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="WASD" Id="C5E4858C"/>
+        </Element>
+        <Element Type="Param" Id="C5E4858C">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Variable" Id="132A7F6B">
+            <VariableType>
+                <Type Value="unit"/>
+            </VariableType>
+            <Value Type="Param" Library="WASD" Id="D8F52B87"/>
+        </Element>
+        <Element Type="Param" Id="D8F52B87">
+            <Preset Type="PresetValue" Library="Ntve" Id="D6EA4D09"/>
+        </Element>
+        <Element Type="FunctionCall" Id="4E7B54AE">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000123"/>
+            <ScriptCode>
+                lv_targetUnit = libWASD_gv_controlledUnits[lp_player];
+                while (libWASD_gv_wASDState[lp_player] != 0x0000) {
+                    UnitIssueOrder(
+                        lv_targetUnit, 
+                        OrderTargetingPoint(
+                            AbilityCommand(&quot;move&quot;, 0), 
+                            PointWithOffsetPolar(UnitGetPosition(lv_targetUnit), 0.3, libWASD_gf_GetWASDAngle(lp_player) + CameraGetYaw(lp_player))
+                            ), 
+                        c_orderQueueReplace
+                    );
+                    Wait(0.0, c_timeGame);
+                }
+            </ScriptCode>
+        </Element>
+        <Element Type="Category" Id="B8368BC4">
+            <Item Type="Variable" Library="WASD" Id="7D9EE071"/>
+            <Item Type="Variable" Library="WASD" Id="1BA9E7D7"/>
+        </Element>
+        <Element Type="Variable" Id="7D9EE071">
+            <Internal/>
+            <VariableType>
+                <Type Value="int"/>
+                <ArraySize Dim="0" Value="16"/>
+            </VariableType>
+            <Value Type="Param" Library="WASD" Id="9BD28AA0"/>
+        </Element>
+        <Element Type="Param" Id="9BD28AA0">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Variable" Id="1BA9E7D7">
+            <Internal/>
+            <VariableType>
+                <Type Value="unit"/>
+                <ArraySize Dim="0" Value="16"/>
+            </VariableType>
+            <Value Type="Param" Library="WASD" Id="025B6BC1"/>
+        </Element>
+        <Element Type="Param" Id="025B6BC1">
+            <Preset Type="PresetValue" Library="Ntve" Id="D6EA4D09"/>
+        </Element>
+        <Element Type="FunctionDef" Id="BD8093AD">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="WASD" Id="5B473FBB"/>
+            <Parameter Type="ParamDef" Library="WASD" Id="424CA6D3"/>
+            <Variable Type="Variable" Library="WASD" Id="BC351575"/>
+            <FunctionCall Type="FunctionCall" Library="WASD" Id="4AA999BF"/>
+        </Element>
+        <Element Type="ParamDef" Id="5B473FBB">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="WASD" Id="13E28A0B"/>
+        </Element>
+        <Element Type="Param" Id="13E28A0B">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="ParamDef" Id="424CA6D3">
+            <ParameterType>
+                <Type Value="preset"/>
+                <TypeElement Type="Preset" Library="Ntve" Id="BF525EE3"/>
+            </ParameterType>
+        </Element>
+        <Element Type="Variable" Id="BC351575">
+            <VariableType>
+                <Type Value="bool"/>
+            </VariableType>
+            <Value Type="Param" Library="WASD" Id="E9099A35"/>
+        </Element>
+        <Element Type="Param" Id="E9099A35">
+            <Value>false</Value>
+            <ValueType Type="bool"/>
+        </Element>
+        <Element Type="FunctionCall" Id="4AA999BF">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000123"/>
+            <ScriptCode>
+                if(libWASD_gv_wASDState[lp_player] != 0x0000) {
+                    lv_originallyMoving = true;
+                }
+                if (lp_keyPressed == c_keyW) {
+                    libWASD_gv_wASDState[lp_player] |= 0x0001;
+                } else if (lp_keyPressed == c_keyA) {
+                    libWASD_gv_wASDState[lp_player] |= 0x0010;
+                } else if (lp_keyPressed == c_keyS) {
+                    libWASD_gv_wASDState[lp_player] |= 0x0100;
+                } else if (lp_keyPressed == c_keyD) {
+                    libWASD_gv_wASDState[lp_player] |= 0x1000;
+                }
+                if(!lv_originallyMoving) {
+                    libWASD_gf_ProcessMovement(lp_player);
+                }
+            </ScriptCode>
+        </Element>
+        <Element Type="FunctionDef" Id="66E93053">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="WASD" Id="894BE1C8"/>
+            <Parameter Type="ParamDef" Library="WASD" Id="44E62AE3"/>
+            <FunctionCall Type="FunctionCall" Library="WASD" Id="841CF7EA"/>
+        </Element>
+        <Element Type="ParamDef" Id="894BE1C8">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="WASD" Id="05379DBE"/>
+        </Element>
+        <Element Type="Param" Id="05379DBE">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="ParamDef" Id="44E62AE3">
+            <ParameterType>
+                <Type Value="preset"/>
+                <TypeElement Type="Preset" Library="Ntve" Id="BF525EE3"/>
+            </ParameterType>
+        </Element>
+        <Element Type="FunctionCall" Id="841CF7EA">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000123"/>
+            <ScriptCode>
+                if (lp_keyPressed == c_keyW) {
+                    libWASD_gv_wASDState[lp_player] ^= 0x0001;
+                } else if (lp_keyPressed == c_keyA) {
+                    libWASD_gv_wASDState[lp_player] ^= 0x0010;
+                } else if (lp_keyPressed == c_keyS) {
+                    libWASD_gv_wASDState[lp_player] ^= 0x0100;
+                } else if (lp_keyPressed == c_keyD) {
+                    libWASD_gv_wASDState[lp_player] ^= 0x1000;
+                }
+            </ScriptCode>
+        </Element>
+        <Element Type="FunctionDef" Id="88805EB3">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="WASD" Id="34A6CCB0"/>
+            <Parameter Type="ParamDef" Library="WASD" Id="EA3C8CF6"/>
+            <FunctionCall Type="FunctionCall" Library="WASD" Id="F17CCF90"/>
+        </Element>
+        <Element Type="ParamDef" Id="34A6CCB0">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="WASD" Id="DCACE4AA"/>
+        </Element>
+        <Element Type="Param" Id="DCACE4AA">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="ParamDef" Id="EA3C8CF6">
+            <ParameterType>
+                <Type Value="unit"/>
+            </ParameterType>
+            <Default Type="Param" Library="WASD" Id="D58B530F"/>
+        </Element>
+        <Element Type="Param" Id="D58B530F">
+            <Preset Type="PresetValue" Library="Ntve" Id="D6EA4D09"/>
+        </Element>
+        <Element Type="FunctionCall" Id="F17CCF90">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000136"/>
+            <Parameter Type="Param" Library="WASD" Id="E580E9A2"/>
+            <Parameter Type="Param" Library="WASD" Id="A29D7D46"/>
+        </Element>
+        <Element Type="Param" Id="E580E9A2">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000219"/>
+            <Variable Type="Variable" Library="WASD" Id="1BA9E7D7"/>
+            <Array Type="Param" Library="WASD" Id="FE5BBC12"/>
+        </Element>
+        <Element Type="Param" Id="FE5BBC12">
+            <Parameter Type="ParamDef" Library="WASD" Id="34A6CCB0"/>
+        </Element>
+        <Element Type="Param" Id="A29D7D46">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000220"/>
+            <Parameter Type="ParamDef" Library="WASD" Id="EA3C8CF6"/>
+        </Element>
+    </Library>
+    <Root>
+        <Item Type="Trigger" Id="7C47ED69"/>
+        <Item Type="Trigger" Id="451F1B4F"/>
+        <Item Type="Trigger" Id="E0E94D35"/>
+    </Root>
+    <Element Type="Trigger" Id="7C47ED69">
+        <Event Type="FunctionCall" Id="17D4C6D8"/>
+        <Action Type="FunctionCall" Id="9D43BFBF"/>
+    </Element>
+    <Element Type="FunctionCall" Id="17D4C6D8">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000120"/>
+    </Element>
+    <Element Type="FunctionCall" Id="9D43BFBF">
+        <FunctionDef Type="FunctionDef" Library="WASD" Id="88805EB3"/>
+        <Parameter Type="Param" Id="517738B7"/>
+        <Parameter Type="Param" Id="7A0DB773"/>
+    </Element>
+    <Element Type="Param" Id="517738B7">
+        <ParameterDef Type="ParamDef" Library="WASD" Id="34A6CCB0"/>
+        <Value>1</Value>
+        <ValueType Type="int"/>
+    </Element>
+    <Element Type="Param" Id="7A0DB773">
+        <ParameterDef Type="ParamDef" Library="WASD" Id="EA3C8CF6"/>
+        <ValueType Type="unit"/>
+        <ValueId Id="2075027713"/>
+    </Element>
+    <Element Type="Trigger" Id="451F1B4F">
+        <Event Type="FunctionCall" Id="214912E0"/>
+        <Action Type="FunctionCall" Id="C8829FA6"/>
+    </Element>
+    <Element Type="FunctionCall" Id="214912E0">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="9A2A3734"/>
+        <Parameter Type="Param" Id="D1E01DEC"/>
+        <Parameter Type="Param" Id="8C112056"/>
+        <Parameter Type="Param" Id="BE486C23"/>
+        <Parameter Type="Param" Id="A72BEE4D"/>
+        <Parameter Type="Param" Id="9B3A0A74"/>
+        <Parameter Type="Param" Id="D6188B2F"/>
+    </Element>
+    <Element Type="Param" Id="D1E01DEC">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="310559CB"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="2999701E"/>
+    </Element>
+    <Element Type="Param" Id="8C112056">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="C8203405"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="3F707D77"/>
+    </Element>
+    <Element Type="Param" Id="BE486C23">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="6B85B860"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="8378D0D9"/>
+    </Element>
+    <Element Type="Param" Id="A72BEE4D">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="53B30B6F"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="CDE1DEBE"/>
+    </Element>
+    <Element Type="Param" Id="9B3A0A74">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="297964B9"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="CDE1DEBE"/>
+    </Element>
+    <Element Type="Param" Id="D6188B2F">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="FE608B8E"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="CDE1DEBE"/>
+    </Element>
+    <Element Type="FunctionCall" Id="C8829FA6">
+        <FunctionDef Type="FunctionDef" Library="WASD" Id="BD8093AD"/>
+        <Parameter Type="Param" Id="7594D2E0"/>
+        <Parameter Type="Param" Id="0F55CE17"/>
+    </Element>
+    <Element Type="Param" Id="7594D2E0">
+        <ParameterDef Type="ParamDef" Library="WASD" Id="5B473FBB"/>
+        <FunctionCall Type="FunctionCall" Id="A39942A5"/>
+    </Element>
+    <Element Type="FunctionCall" Id="A39942A5">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000053"/>
+    </Element>
+    <Element Type="Param" Id="0F55CE17">
+        <ParameterDef Type="ParamDef" Library="WASD" Id="424CA6D3"/>
+        <FunctionCall Type="FunctionCall" Id="399F948F"/>
+    </Element>
+    <Element Type="FunctionCall" Id="399F948F">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="CCCD0A10"/>
+    </Element>
+    <Element Type="Trigger" Id="E0E94D35">
+        <Event Type="FunctionCall" Id="FA06DC7A"/>
+        <Action Type="FunctionCall" Id="8FA4A12E"/>
+    </Element>
+    <Element Type="FunctionCall" Id="FA06DC7A">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="9A2A3734"/>
+        <Parameter Type="Param" Id="2C5F2C3A"/>
+        <Parameter Type="Param" Id="F14C89A6"/>
+        <Parameter Type="Param" Id="A871B8D1"/>
+        <Parameter Type="Param" Id="68B3A19F"/>
+        <Parameter Type="Param" Id="BAD0ABA3"/>
+        <Parameter Type="Param" Id="0EB9EE0D"/>
+    </Element>
+    <Element Type="Param" Id="2C5F2C3A">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="310559CB"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="2999701E"/>
+    </Element>
+    <Element Type="Param" Id="F14C89A6">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="C8203405"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="3F707D77"/>
+    </Element>
+    <Element Type="Param" Id="A871B8D1">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="6B85B860"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="57F0678C"/>
+    </Element>
+    <Element Type="Param" Id="68B3A19F">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="53B30B6F"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="CDE1DEBE"/>
+    </Element>
+    <Element Type="Param" Id="BAD0ABA3">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="297964B9"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="CDE1DEBE"/>
+    </Element>
+    <Element Type="Param" Id="0EB9EE0D">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="FE608B8E"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="CDE1DEBE"/>
+    </Element>
+    <Element Type="FunctionCall" Id="8FA4A12E">
+        <FunctionDef Type="FunctionDef" Library="WASD" Id="66E93053"/>
+        <Parameter Type="Param" Id="8092091D"/>
+        <Parameter Type="Param" Id="2940DFCE"/>
+    </Element>
+    <Element Type="Param" Id="8092091D">
+        <ParameterDef Type="ParamDef" Library="WASD" Id="894BE1C8"/>
+        <FunctionCall Type="FunctionCall" Id="49436226"/>
+    </Element>
+    <Element Type="FunctionCall" Id="49436226">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000053"/>
+    </Element>
+    <Element Type="Param" Id="2940DFCE">
+        <ParameterDef Type="ParamDef" Library="WASD" Id="44E62AE3"/>
+        <FunctionCall Type="FunctionCall" Id="34A234DD"/>
+    </Element>
+    <Element Type="FunctionCall" Id="34A234DD">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="CCCD0A10"/>
+    </Element>
+</TriggerData>

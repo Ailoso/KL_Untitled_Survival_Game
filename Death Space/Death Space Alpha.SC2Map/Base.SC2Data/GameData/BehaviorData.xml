@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CBehaviorBuff id="SpaceShipMoveUp">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+        <FinalEffect value="SpaceShipMoveIssueStopOrderUp"/>
+        <Modification>
+            <AbilClassDisableArray index="CAbilStop" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+</Catalog>

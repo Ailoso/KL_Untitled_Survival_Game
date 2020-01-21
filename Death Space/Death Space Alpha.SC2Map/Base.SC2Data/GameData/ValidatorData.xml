@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CValidatorUnitCompareBehaviorCount id="CasterHasNotMoveLEFT">
+        <Behavior value="SpaceShipMoveLeft"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="CasterHasNotMoveRIGHT">
+        <Behavior value="SpaceShipMoveRight"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="CasterHasNotMoveUP">
+        <Behavior value="SpaceShipMoveUp"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="CasterHasNotMoveDOWN">
+        <Behavior value="SpaceShipMoveDown"/>
+    </CValidatorUnitCompareBehaviorCount>
+</Catalog>

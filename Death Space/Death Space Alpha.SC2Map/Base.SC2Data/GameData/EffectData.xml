@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CEffectSet id="SpaceShipMoveSetInitUp">
+        <EffectArray value="SpaceShipMoveMoveUp"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="SpaceShipMoveMoveUp">
+        <WhichLocation Value="SourcePoint"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="SpaceShipMoveSetUp"/>
+        <PeriodicOffsetArray value="0,-4,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="SpaceShipMoveSetUp">
+        <EffectArray value="SpaceShipMoveIssueOrderUp"/>
+        <EffectArray value="SpaceShipMoveABUp"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SpaceShipMoveABUp">
+        <ValidatorArray index="0" removed="1"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SpaceShipMoveUp"/>
+    </CEffectApplyBehavior>
+    <CEffectIssueOrder id="SpaceShipMoveIssueOrderUp">
+        <WhichUnit Effect="SpaceShipMoveMoveUp" Value="Caster"/>
+        <Abil value="move"/>
+        <Player Value="Caster"/>
+        <Target Value="TargetPoint"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="SpaceShipMoveIssueStopOrderUp">
+        <ValidatorArray value="CasterHasNotMoveRIGHT"/>
+        <ValidatorArray value="CasterHasNotMoveUP"/>
+        <ValidatorArray value="CasterHasNotMoveDOWN"/>
+        <ValidatorArray value="CasterHasNotMoveLEFT"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Abil value="stop"/>
+    </CEffectIssueOrder>
+</Catalog>

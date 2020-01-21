@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CAbilEffectTarget id="SpaceShipFlyUp">
+        <Effect index="0" value="SpaceShipMoveSetInitUp"/>
+        <Flags index="AbortOnAllianceChange" value="0"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="ChannelingMinimum" value="0"/>
+        <Flags index="ClearLastMoveTarget" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="RangeUseCasterRadius" value="0"/>
+        <Flags index="ReApproachable" value="0"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Flags index="UpdateChargesOnLevelChange" value="0"/>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <AutoCastRange value="500"/>
+        <IgnoreFilters value="-;Ally,Neutral,Enemy"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SpaceShipMoveUp">
+            <Flags index="AllowSelfCast" value="1"/>
+            <Flags index="Continuous" value="1"/>
+        </CmdButtonArray>
+        <OrderArray index="0" Color="0,0,255,0"/>
+    </CAbilEffectTarget>
+</Catalog>

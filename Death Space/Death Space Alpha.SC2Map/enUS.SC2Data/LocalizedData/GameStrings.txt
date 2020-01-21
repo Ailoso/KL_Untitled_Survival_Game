@@ -1,0 +1,10 @@
+﻿Abil/Name/UnknownAbility=Unknown Ability
+Behavior/Name/UnknownBehavior=Unknown Behavior
+Button/Name/UnknownButton=Unknown Button
+DocInfo/DescLong=Completely devoid of any description whatsoever.
+DocInfo/DescShort=Any
+DocInfo/Name=Just Another StarCraft II Map
+Effect/Name/UnknownEffect=Unknown Effect
+MapInfo/Player00/Name=Neutral
+MapInfo/Player01/Name=Player 1
+MapInfo/Player02/Name=Hostile
