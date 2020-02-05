@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <!-- Flashlight for regular Raynor                                                           -->
+    <CActorModel id="FlashlightModel">
+        <Scale value="2.000000"/>
+    </CActorModel>
+    <CActorUnit id="Separatist">
+        <Scale value="0.500000"/>
+    </CActorUnit>
+</Catalog>

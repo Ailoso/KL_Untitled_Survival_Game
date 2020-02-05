@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="1">
+        <name value="Shuttle_InfirmaryDoor"/>
+        <shape type="diamond">
+            <center value="22.05,16.4382"/>
+            <width value="2.322"/>
+            <height value="1.6296"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Player Radius"/>
+        <shape type="circle">
+            <center value="12.791,15.0986"/>
+            <radius value="1.5"/>
+        </shape>
+    </region>
+</Regions>

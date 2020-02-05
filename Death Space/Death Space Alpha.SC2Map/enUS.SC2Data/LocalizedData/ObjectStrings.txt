@@ -1,1 +1,6 @@
-﻿Validator/Name/UnknownValidator=Unknown Validator
+﻿Light/EditorPrefix/ShipEscape=DS
+Light/Name/EditorTestLight=default
+Light/Name/ShipEscape=ShipEscape
+User/EditorPrefix/WeaponTypes=DS -
+User/Name/WeaponTypes=WeaponTypes
+Validator/Name/UnknownValidator=Unknown Validator

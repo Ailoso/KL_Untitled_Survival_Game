@@ -8,24 +8,65 @@
 include "TriggerLibs/NativeLib"
 
 //--------------------------------------------------------------------------------------------------
-// Library: Movement Libs
+// Library: Top-Down Engine
 //--------------------------------------------------------------------------------------------------
+// Preset Declarations
+const int libWASD_ge_ButtonType_Control = 0;
+const int libWASD_ge_ButtonType_LootChest = 1;
+
 // Variable Declarations
 int[17] libWASD_gv_wASDState;
 unit[17] libWASD_gv_controlledUnits;
+bool libWASD_gv_aimingDown;
+unit libWASD_gv_playerUnit;
+fixed libWASD_gv_camHeight;
+bool libWASD_gv_w;
+bool libWASD_gv_a;
+bool libWASD_gv_s;
+bool libWASD_gv_d;
+fixed libWASD_gv_attackCooldown;
+bool libWASD_gv_attackOnCooldown;
+int libWASD_gv_maxAmmo;
+int libWASD_gv_curAmmo;
+bool libWASD_gv_reloading;
+bool libWASD_gv_zoomed;
+bool libWASD_gv_flashlight;
+bool libWASD_gv_firing;
+int libWASD_gv_fireModeText;
+int libWASD_gv_fireMode;
+unit libWASD_gv_targetUnit;
+point libWASD_gv_targetPoint;
 
 // Function Declarations
+void libWASD_gf_CreateButton (point lp_location, fixed lp_angle, int lp_type, bool lp_active, string lp_model, int lp_variation, fixed lp_scale);
+void libWASD_gf_EnableDisableButton (bool lp_enableDisable, unit lp_object);
 fixed libWASD_gf_GetWASDAngle (int lp_player);
 void libWASD_gf_ProcessMovement (int lp_player);
 void libWASD_gf_KeyDownCheck (int lp_player, int lp_keyPressed);
 void libWASD_gf_KeyUpCheck (int lp_player, int lp_keyPressed);
 void libWASD_gf_SetControlledUnit (int lp_player, unit lp_unit);
+void libWASD_gf_Traceline (int lp_player);
+void libWASD_gf_Fire (int lp_shots);
+
+// Trigger Declarations
+trigger libWASD_gt_RightClicking;
+trigger libWASD_gt_RightClickRelease;
+trigger libWASD_gt_RightClickDown;
+trigger libWASD_gt_Click;
+trigger libWASD_gt_ShootBurst;
+trigger libWASD_gt_ShootFullAuto;
+trigger libWASD_gt_ShootFullAutorelease;
+trigger libWASD_gt_CoolDownAttack;
+trigger libWASD_gt_Reload;
+trigger libWASD_gt_PressRReload;
+trigger libWASD_gt_PressXSwitchFireMode;
+trigger libWASD_gt_PressFFlashlight;
 
 // Library Initialization
 void libWASD_InitVariables ();
 
 //--------------------------------------------------------------------------------------------------
-// Library: Movement Libs
+// Library: Top-Down Engine
 //--------------------------------------------------------------------------------------------------
 // External Library Initialization
 void libWASD_InitLibraries () {
@@ -42,9 +83,62 @@ void libWASD_InitVariables () {
 
     libWASD_InitVariables_completed = true;
 
+    libWASD_gv_playerUnit = UnitFromId(2075027713);
+    libWASD_gv_camHeight = 1.1;
+    libWASD_gv_attackCooldown = 0.4;
+    libWASD_gv_maxAmmo = 40;
+    libWASD_gv_curAmmo = libWASD_gv_maxAmmo;
+    libWASD_gv_fireModeText = c_invalidDialogControlId;
+    libWASD_gv_fireMode = 1;
 }
 
+// Presets
 // Functions
+void libWASD_gf_CreateButton (point lp_location, fixed lp_angle, int lp_type, bool lp_active, string lp_model, int lp_variation, fixed lp_scale) {
+    // Variable Declarations
+    unit lv_object;
+
+    // Automatic Variable Declarations
+    bool auto1F078567_val;
+
+    // Variable Initialization
+
+    // Implementation
+    UnitCreate(1, "InvisibleTargetDummy", c_unitCreateIgnorePlacement, 0, lp_location, lp_angle);
+    lv_object = UnitLastCreated();
+    libNtve_gf_CreateUnitsWithDefaultFacing(1, "PathingBlocker1x1", 0, 0, lp_location);
+    libNtve_gf_CreateUnitsWithDefaultFacing(1, "PathingBlocker1x1Diagonal", 0, 0, lp_location);
+    UnitSetScale(lv_object, lp_scale, lp_scale, lp_scale);
+    ActorSend(libNtve_gf_MainActorofUnit(lv_object), libNtve_gf_ModelSwap(lp_model, lp_variation));
+    libNtve_gf_SendActorMessageToUnit(lv_object, "HaloSetColor 115,198,204");
+    UnitSetCustomValue(lv_object, 0, IntToFixed((lp_type)));
+    auto1F078567_val = lp_active;
+    if (auto1F078567_val == true) {
+        UnitSetCustomValue(lv_object, 0, 1.0);
+    }
+    else if (auto1F078567_val == false) {
+        UnitSetCustomValue(lv_object, 0, 0.0);
+    }
+    else {
+    }
+    UnitSetCustomValue(lv_object, 1, IntToFixed((lp_type)));
+    UnitSetState(lv_object, c_unitStateCursorable, false);
+    UnitSetState(lv_object, c_unitStateHighlightable, false);
+    UnitSetState(lv_object, c_unitStateSelectable, false);
+    UnitSetState(lv_object, c_unitStateTargetable, false);
+}
+
+void libWASD_gf_EnableDisableButton (bool lp_enableDisable, unit lp_object) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((lp_enableDisable != true)) {
+        UnitSetState(lp_object, c_unitStateSelectable, false);
+    }
+    else {
+        UnitSetState(lp_object, c_unitStateSelectable, true);
+    }
+}
+
 fixed libWASD_gf_GetWASDAngle (int lp_player) {
     // Variable Declarations
     int lv_tempBits;
@@ -154,6 +248,579 @@ void libWASD_gf_SetControlledUnit (int lp_player, unit lp_unit) {
     libWASD_gv_controlledUnits[lp_player] = lp_unit;
 }
 
+void libWASD_gf_Traceline (int lp_player) {
+    // Variable Declarations
+    int lv_weaponRange;
+    fixed lv_camYaw;
+    fixed lv_camPitch;
+    fixed lv_camHeight;
+    fixed lv_traceDistance;
+    fixed lv_traceHeight;
+    point lv_tracePoint;
+    region lv_traceRegion;
+    fixed lv_traceWorldHeight;
+    unit lv_targetClosestUnit;
+    fixed lv_targetUnitWorldHeight;
+
+    // Automatic Variable Declarations
+    fixed auto812A06EA_ae;
+    const fixed auto812A06EA_ai = 0.1;
+
+    // Variable Initialization
+    lv_weaponRange = 100;
+    lv_camYaw = CameraGetYaw(lp_player);
+    lv_camPitch = CameraGetPitch(lp_player);
+    lv_camHeight = (WorldHeight(c_heightMapGround, UnitGetPosition(libWASD_gv_playerUnit)) + libWASD_gv_camHeight);
+
+    // Implementation
+    auto812A06EA_ae = IntToFixed(lv_weaponRange);
+    lv_traceDistance = 0.0;
+    for ( ; ( (auto812A06EA_ai >= 0 && lv_traceDistance <= auto812A06EA_ae) || (auto812A06EA_ai < 0 && lv_traceDistance >= auto812A06EA_ae) ) ; lv_traceDistance += auto812A06EA_ai ) {
+        if ((lv_camPitch < 90.0)) {
+            lv_traceHeight = (Tan(lv_camPitch) * (lv_traceDistance * -1.0));
+        }
+        else {
+            if ((lv_camPitch > 270.0)) {
+                lv_traceHeight = (Tan((360.0 - lv_camPitch)) * lv_traceDistance);
+            }
+
+        }
+        lv_tracePoint = PointWithOffsetPolar(UnitGetPosition(libWASD_gv_playerUnit), lv_traceDistance, lv_camYaw);
+        lv_traceRegion = RegionCircle(lv_tracePoint, 0.3);
+        lv_traceWorldHeight = WorldHeight(c_heightMapGround, lv_tracePoint);
+        lv_targetClosestUnit = libNtve_gf_ClosestUnitToPoint(lv_tracePoint, UnitGroup(null, c_playerAny, lv_traceRegion, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0));
+        lv_targetUnitWorldHeight = WorldHeight(c_heightMapGround, UnitGetPosition(lv_targetClosestUnit));
+        libWASD_gv_targetUnit = null;
+        libWASD_gv_targetPoint = null;
+        if (((lv_targetClosestUnit != null) && (AbsF((lv_camHeight + (lv_traceHeight - lv_targetUnitWorldHeight))) >= 0.0) && (AbsF((lv_camHeight + (lv_traceHeight - lv_targetUnitWorldHeight))) <= UnitGetCustomValue(lv_targetClosestUnit, 0)))) {
+            libWASD_gv_targetUnit = lv_targetClosestUnit;
+            return ;
+        }
+        else {
+            if ((AbsF((lv_camHeight + lv_traceHeight)) <= WorldHeight(c_heightMapGround, lv_tracePoint))) {
+                libWASD_gv_targetPoint = lv_tracePoint;
+                return ;
+            }
+
+        }
+    }
+}
+
+trigger auto_libWASD_gf_Fire_Trigger = null;
+int auto_libWASD_gf_Fire_lp_shots;
+
+void libWASD_gf_Fire (int lp_shots) {
+    auto_libWASD_gf_Fire_lp_shots = lp_shots;
+
+    if (auto_libWASD_gf_Fire_Trigger == null) {
+        auto_libWASD_gf_Fire_Trigger = TriggerCreate("auto_libWASD_gf_Fire_TriggerFunc");
+    }
+
+    TriggerExecute(auto_libWASD_gf_Fire_Trigger, false, false);
+}
+
+bool auto_libWASD_gf_Fire_TriggerFunc (bool testConds, bool runActions) {
+    int lp_shots = auto_libWASD_gf_Fire_lp_shots;
+
+    // Automatic Variable Declarations
+    int autoB16E35BC_n;
+    int autoB16E35BC_i;
+
+    // Implementation
+    autoB16E35BC_n = lp_shots;
+    for (autoB16E35BC_i = 1; autoB16E35BC_i <= autoB16E35BC_n; autoB16E35BC_i += 1) {
+        libWASD_gv_curAmmo -= 1;
+        libNtve_gf_SetBossBarCurrentValue(2, libWASD_gv_curAmmo, true);
+        Wait(0.1, c_timeReal);
+    }
+    return true;
+}
+
+// Triggers
+//--------------------------------------------------------------------------------------------------
+// Trigger: Right Clicking
+//--------------------------------------------------------------------------------------------------
+bool libWASD_gt_RightClicking_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    fixed lv_dY_move;
+    fixed lv_dX_move;
+    const fixed lv_weaponRange = 3.0;
+    point lv_tracePoint;
+    point lv_convertedTracePoint;
+    point lv_shortTracePoint;
+    fixed lv_traceDistance;
+    fixed lv_traceAngle;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lv_dX_move = EventMouseMovedPosXWorld();
+    lv_dY_move = EventMouseMovedPosYWorld();
+    lv_tracePoint = Point(lv_dX_move, lv_dY_move);
+    lv_traceAngle = AngleBetweenPoints(UnitGetPosition(libWASD_gv_playerUnit), lv_tracePoint);
+    lv_shortTracePoint = PointWithOffsetPolar(UnitGetPosition(UnitFromId(2075027713)), (lv_weaponRange - 1.0), lv_traceAngle);
+    lv_convertedTracePoint = PointWithOffsetPolar(UnitGetPosition(UnitFromId(2075027713)), (DistanceBetweenPoints(UnitGetPosition(libWASD_gv_playerUnit), lv_tracePoint) - 1.0), lv_traceAngle);
+    if ((DistanceBetweenPoints(UnitGetPosition(libWASD_gv_playerUnit), lv_tracePoint) <= lv_weaponRange)) {
+        CameraPan(1, lv_convertedTracePoint, 0.5, -1, 10.0, false);
+    }
+    else {
+        CameraPan(1, lv_shortTracePoint, 0.5, -1, 10.0, false);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWASD_gt_RightClicking_Init () {
+    libWASD_gt_RightClicking = TriggerCreate("libWASD_gt_RightClicking_Func");
+    TriggerEnable(libWASD_gt_RightClicking, false);
+    TriggerAddEventMouseMoved(libWASD_gt_RightClicking, c_playerAny);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Right Click Release
+//--------------------------------------------------------------------------------------------------
+bool libWASD_gt_RightClickRelease_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(libWASD_gt_RightClicking, false);
+    TriggerEnable(libWASD_gt_RightClicking, true);
+    libWASD_gv_aimingDown = false;
+    CameraFollowUnitGroup(1, libNtve_gf_ConvertUnitToUnitGroup(libWASD_gv_playerUnit), true, false);
+    CameraSetValue(1, c_cameraValueDistance, 13.0, 0.5, -1, 10.0);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWASD_gt_RightClickRelease_Init () {
+    libWASD_gt_RightClickRelease = TriggerCreate("libWASD_gt_RightClickRelease_Func");
+    TriggerAddEventMouseClicked(libWASD_gt_RightClickRelease, c_playerAny, c_mouseButtonRight, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Right Click Down
+//--------------------------------------------------------------------------------------------------
+bool libWASD_gt_RightClickDown_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(libWASD_gt_Click, true);
+    TriggerEnable(libWASD_gt_RightClicking, true);
+    libWASD_gv_aimingDown = true;
+    CameraFollowUnitGroup(1, libNtve_gf_ConvertUnitToUnitGroup(libWASD_gv_playerUnit), false, false);
+    CameraSetValue(1, c_cameraValueDistance, 10.0, 0.5, -1, 10.0);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWASD_gt_RightClickDown_Init () {
+    libWASD_gt_RightClickDown = TriggerCreate("libWASD_gt_RightClickDown_Func");
+    TriggerAddEventMouseClicked(libWASD_gt_RightClickDown, c_playerAny, c_mouseButtonRight, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Click
+//--------------------------------------------------------------------------------------------------
+bool libWASD_gt_Click_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    fixed lv_dY_shot;
+    fixed lv_dX_shot;
+    const fixed lv_weaponRange = 3.0;
+    point lv_tracePoint;
+    point lv_shortTracePoint;
+    fixed lv_traceDistance;
+    fixed lv_traceAngle;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+
+    // Conditions
+    if (testConds) {
+        if (!((libWASD_gv_aimingDown == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lv_dX_shot = EventMouseClickedPosXWorld();
+    lv_dY_shot = EventMouseClickedPosYWorld();
+    lv_tracePoint = Point(lv_dX_shot, lv_dY_shot);
+    lv_traceAngle = AngleBetweenPoints(UnitGetPosition(libWASD_gv_playerUnit), lv_tracePoint);
+    lv_shortTracePoint = PointWithOffsetPolar(UnitGetPosition(UnitFromId(2075027713)), lv_weaponRange, lv_traceAngle);
+    if ((DistanceBetweenPoints(UnitGetPosition(libWASD_gv_playerUnit), lv_tracePoint) <= lv_weaponRange)) {
+        libNtve_gf_CreateUnitsWithDefaultFacing(1, "SCV", 0, 1, lv_tracePoint);
+    }
+    else {
+        libNtve_gf_CreateUnitsWithDefaultFacing(1, "SCV", 0, 1, lv_shortTracePoint);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWASD_gt_Click_Init () {
+    libWASD_gt_Click = TriggerCreate("libWASD_gt_Click_Func");
+    TriggerEnable(libWASD_gt_Click, false);
+    TriggerAddEventMouseClicked(libWASD_gt_Click, c_playerAny, c_mouseButtonLeft, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Shoot - Burst
+//--------------------------------------------------------------------------------------------------
+bool libWASD_gt_ShootBurst_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_player;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_player = EventPlayer();
+
+    // Conditions
+    if (testConds) {
+        if (!(((UnitIsAlive(libWASD_gv_playerUnit) == true) && (libWASD_gv_attackOnCooldown == false) && (libWASD_gv_w == false) && (libWASD_gv_a == false) && (libWASD_gv_s == false) && (libWASD_gv_d == false)))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((libWASD_gv_curAmmo == 0)) {
+        SoundPlay(SoundLink("WidowMine_ArmedBeep", 0), PlayerGroupAll(), 100.0, 0.0);
+    }
+    else {
+        libWASD_gv_attackOnCooldown = true;
+        TriggerExecute(libWASD_gt_CoolDownAttack, false, false);
+        libWASD_gf_Fire(4);
+        libNtve_gf_PlayAnimation(libNtve_gf_MainActorofUnit(libWASD_gv_playerUnit), c_animNameDefault, "Attack", 0, c_animTimeDefault);
+        libWASD_gf_Traceline(lv_player);
+        if ((libWASD_gv_targetUnit != null)) {
+            UnitCreateEffectUnit(libWASD_gv_playerUnit, "RaynorGaussRifleDamage", libWASD_gv_targetUnit);
+            if (((UnitGetOwner(libWASD_gv_targetUnit) == 2) || (UnitGetOwner(libWASD_gv_targetUnit) == 3))) {
+                UnitIssueOrder(libWASD_gv_targetUnit, OrderTargetingUnit(AbilityCommand("attack", 0), libWASD_gv_playerUnit), c_orderQueueReplace);
+                UnitGroupIssueOrder(UnitGroup(null, 3, RegionCircle(UnitGetPosition(libWASD_gv_targetUnit), 6.0), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), OrderTargetingPoint(AbilityCommand("attack", 0), RegionRandomPoint(RegionFromId(30))), c_orderQueueReplace);
+            }
+
+        }
+        else {
+            if ((libWASD_gv_targetPoint != null)) {
+                UnitCreateEffectPoint(libWASD_gv_playerUnit, "RaynorGaussRifleDamage", libWASD_gv_targetPoint);
+            }
+            else {
+                SoundPlay(SoundLink("Marine_AttackLaunch", -1), PlayerGroupAll(), 100.0, 0.0);
+            }
+        }
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWASD_gt_ShootBurst_Init () {
+    libWASD_gt_ShootBurst = TriggerCreate("libWASD_gt_ShootBurst_Func");
+    TriggerEnable(libWASD_gt_ShootBurst, false);
+    TriggerAddEventMouseClicked(libWASD_gt_ShootBurst, 1, c_mouseButtonLeft, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Shoot - Full Auto
+//--------------------------------------------------------------------------------------------------
+bool libWASD_gt_ShootFullAuto_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_player;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_player = EventPlayer();
+
+    // Conditions
+    if (testConds) {
+        if (!((UnitIsAlive(libWASD_gv_playerUnit) == true))) {
+            return false;
+        }
+
+        if (!((libWASD_gv_w == false))) {
+            return false;
+        }
+
+        if (!((libWASD_gv_a == false))) {
+            return false;
+        }
+
+        if (!((libWASD_gv_s == false))) {
+            return false;
+        }
+
+        if (!((libWASD_gv_d == false))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((libWASD_gv_curAmmo <= 0)) {
+        SoundPlay(SoundLink("WidowMine_ArmedBeep", 0), PlayerGroupAll(), 100.0, 0.0);
+    }
+    else {
+        libWASD_gv_firing = true;
+        while (true) {
+            libNtve_gf_PlayAnimation(libNtve_gf_MainActorofUnit(libWASD_gv_playerUnit), c_animNameDefault, "Attack", 0, c_animTimeDefault);
+            libWASD_gf_Traceline(lv_player);
+            libWASD_gf_Fire(4);
+            if ((libWASD_gv_targetUnit != null)) {
+                UnitCreateEffectUnit(libWASD_gv_playerUnit, "RaynorGaussRifleDamage", libWASD_gv_targetUnit);
+                if (((UnitGetOwner(libWASD_gv_targetUnit) == 2) || (UnitGetOwner(libWASD_gv_targetUnit) == 3))) {
+                    UnitIssueOrder(libWASD_gv_targetUnit, OrderTargetingUnit(AbilityCommand("attack", 0), libWASD_gv_playerUnit), c_orderQueueReplace);
+                    UnitGroupIssueOrder(UnitGroup(null, 3, RegionCircle(UnitGetPosition(libWASD_gv_targetUnit), 6.0), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), OrderTargetingPoint(AbilityCommand("attack", 0), RegionRandomPoint(RegionFromId(30))), c_orderQueueReplace);
+                }
+
+            }
+            else {
+                if ((libWASD_gv_targetPoint != null)) {
+                    UnitCreateEffectPoint(libWASD_gv_playerUnit, "RaynorGaussRifleDamage", libWASD_gv_targetPoint);
+                }
+                else {
+                    SoundPlay(SoundLink("Marine_AttackLaunch", -1), PlayerGroupAll(), 100.0, 0.0);
+                }
+            }
+            Wait(0.4, c_timeReal);
+            if ((libWASD_gv_curAmmo <= 0)) {
+                TriggerStop(TriggerGetCurrent());
+                libWASD_gv_firing = false;
+            }
+
+        }
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWASD_gt_ShootFullAuto_Init () {
+    libWASD_gt_ShootFullAuto = TriggerCreate("libWASD_gt_ShootFullAuto_Func");
+    TriggerEnable(libWASD_gt_ShootFullAuto, false);
+    TriggerAddEventMouseClicked(libWASD_gt_ShootFullAuto, 1, c_mouseButtonLeft, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Shoot - Full Auto release
+//--------------------------------------------------------------------------------------------------
+bool libWASD_gt_ShootFullAutorelease_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((libWASD_gv_firing == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerStop(libWASD_gt_ShootFullAuto);
+    TriggerEnable(libWASD_gt_ShootFullAuto, false);
+    TriggerEnable(libWASD_gt_PressXSwitchFireMode, false);
+    libWASD_gv_firing = false;
+    Wait(0.5, c_timeReal);
+    TriggerEnable(libWASD_gt_ShootFullAuto, true);
+    TriggerEnable(libWASD_gt_PressXSwitchFireMode, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWASD_gt_ShootFullAutorelease_Init () {
+    libWASD_gt_ShootFullAutorelease = TriggerCreate("libWASD_gt_ShootFullAutorelease_Func");
+    TriggerEnable(libWASD_gt_ShootFullAutorelease, false);
+    TriggerAddEventMouseClicked(libWASD_gt_ShootFullAutorelease, 1, c_mouseButtonLeft, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Cool Down Attack
+//--------------------------------------------------------------------------------------------------
+bool libWASD_gt_CoolDownAttack_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    Wait(AbsF(libWASD_gv_attackCooldown), c_timeReal);
+    libWASD_gv_attackOnCooldown = false;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWASD_gt_CoolDownAttack_Init () {
+    libWASD_gt_CoolDownAttack = TriggerCreate("libWASD_gt_CoolDownAttack_Func");
+    TriggerEnable(libWASD_gt_CoolDownAttack, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Reload
+//--------------------------------------------------------------------------------------------------
+bool libWASD_gt_Reload_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    Wait(2.0, c_timeReal);
+    libWASD_gv_curAmmo = libWASD_gv_maxAmmo;
+    libNtve_gf_SetBossBarCurrentValue(2, libWASD_gv_curAmmo, true);
+    TriggerEnable(libWASD_gt_PressRReload, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWASD_gt_Reload_Init () {
+    libWASD_gt_Reload = TriggerCreate("libWASD_gt_Reload_Func");
+    TriggerEnable(libWASD_gt_Reload, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Press R (Reload)
+//--------------------------------------------------------------------------------------------------
+bool libWASD_gt_PressRReload_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!(((UnitIsAlive(libWASD_gv_playerUnit) == true) && (libWASD_gv_curAmmo < libWASD_gv_maxAmmo)))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    SoundPlay(SoundLink("reload", -1), PlayerGroupAll(), 100.0, 0.0);
+    libWASD_gv_curAmmo = 0;
+    libNtve_gf_SetBossBarCurrentValue(2, libWASD_gv_curAmmo, true);
+    TriggerExecute(libWASD_gt_Reload, false, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWASD_gt_PressRReload_Init () {
+    libWASD_gt_PressRReload = TriggerCreate("libWASD_gt_PressRReload_Func");
+    TriggerAddEventKeyPressed(libWASD_gt_PressRReload, 1, c_keyR, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Press X (Switch Fire Mode)
+//--------------------------------------------------------------------------------------------------
+bool libWASD_gt_PressXSwitchFireMode_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitIsAlive(libWASD_gv_playerUnit) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    libWASD_gv_fireMode = (libWASD_gv_fireMode + 1);
+    Wait(0.1, c_timeReal);
+    if ((libWASD_gv_fireMode == 2)) {
+        TriggerEnable(libWASD_gt_ShootBurst, false);
+        TriggerEnable(libWASD_gt_ShootFullAuto, true);
+        TriggerEnable(libWASD_gt_ShootFullAutorelease, true);
+    }
+    else {
+        if ((libWASD_gv_fireMode == 3)) {
+            TriggerEnable(libWASD_gt_ShootFullAuto, false);
+            TriggerEnable(libWASD_gt_ShootFullAutorelease, false);
+            TriggerEnable(libWASD_gt_ShootBurst, true);
+            libWASD_gv_fireMode = 1;
+        }
+
+    }
+    Wait(0.1, c_timeReal);
+    TriggerEnable(TriggerGetCurrent(), true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWASD_gt_PressXSwitchFireMode_Init () {
+    libWASD_gt_PressXSwitchFireMode = TriggerCreate("libWASD_gt_PressXSwitchFireMode_Func");
+    TriggerAddEventKeyPressed(libWASD_gt_PressXSwitchFireMode, 1, c_keyX, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Press F (Flashlight)
+//--------------------------------------------------------------------------------------------------
+bool libWASD_gt_PressFFlashlight_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_player;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_player = EventPlayer();
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((libWASD_gv_flashlight == false)) {
+        libWASD_gv_flashlight = true;
+        UnitBehaviorAddPlayer(libWASD_gv_playerUnit, "Flashlight", lv_player, 1);
+    }
+    else {
+        libWASD_gv_flashlight = false;
+        UnitBehaviorRemovePlayer(libWASD_gv_playerUnit, "Flashlight", lv_player, 1);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWASD_gt_PressFFlashlight_Init () {
+    libWASD_gt_PressFFlashlight = TriggerCreate("libWASD_gt_PressFFlashlight_Func");
+    TriggerAddEventKeyPressed(libWASD_gt_PressFFlashlight, 1, c_keyF, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+}
+
+void libWASD_InitTriggers () {
+    libWASD_gt_RightClicking_Init();
+    libWASD_gt_RightClickRelease_Init();
+    libWASD_gt_RightClickDown_Init();
+    libWASD_gt_Click_Init();
+    libWASD_gt_ShootBurst_Init();
+    libWASD_gt_ShootFullAuto_Init();
+    libWASD_gt_ShootFullAutorelease_Init();
+    libWASD_gt_CoolDownAttack_Init();
+    libWASD_gt_Reload_Init();
+    libWASD_gt_PressRReload_Init();
+    libWASD_gt_PressXSwitchFireMode_Init();
+    libWASD_gt_PressFFlashlight_Init();
+}
+
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
 //--------------------------------------------------------------------------------------------------
@@ -168,6 +835,7 @@ void libWASD_InitLib () {
 
     libWASD_InitLibraries();
     libWASD_InitVariables();
+    libWASD_InitTriggers();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -179,11 +847,36 @@ void InitLibs () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+const int gv_pLAYER_01_MAP_OJBECTS = 0;
+const int gv_pLAYER_01_USER = 1;
+const int gv_pLAYER_02_ZERG = 2;
+
+//--------------------------------------------------------------------------------------------------
+// Global Variables
+//--------------------------------------------------------------------------------------------------
+unit gv_player;
+bool gv_aimingDown;
+unit gv_obj_InfirmaryControl;
+unit gv_obj_InfirmaryControl2;
+
+void InitGlobals () {
+    gv_player = UnitFromId(2075027713);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
 trigger gt_Init;
 trigger gt_KeyDown;
 trigger gt_KeyUp;
+trigger gt_ShuttleInit;
+trigger gt_ShuttleInitializationQ;
+trigger gt_ShuttleEnvironment;
+trigger gt_ShuttleObjects;
+trigger gt_ShuttleInfirmaryControl;
+trigger gt_ShuttleInfirmaryControlApproach;
 
 //--------------------------------------------------------------------------------------------------
 // Trigger: Init
@@ -195,7 +888,23 @@ bool gt_Init_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libWASD_gf_SetControlledUnit(1, UnitFromId(2075027713));
+    libWASD_gf_SetControlledUnit(gv_pLAYER_01_USER, gv_player);
+    UnitSetState(gv_player, c_unitStateHighlightable, false);
+    UnitSetState(gv_player, c_unitStateCursorable, false);
+    UnitSetState(gv_player, c_unitStateSelectable, false);
+    GameSetLighting("SMStarmapPlanetTest", 0.0);
+    RegionAttachToUnit(RegionFromId(2), gv_player, UnitGetPosition(gv_player));
+    CameraLockInput(gv_pLAYER_01_USER, true);
+    CameraPan(gv_pLAYER_01_USER, UnitGetPosition(gv_player), 0.0, -1, 0, false);
+    CameraFollowUnitGroup(gv_pLAYER_01_USER, libNtve_gf_ConvertUnitToUnitGroup(gv_player), true, false);
+    CameraSetValue(gv_pLAYER_01_USER, c_cameraValueDistance, 13.0, 0.0, -1, 10.0);
+    CameraSetValue(gv_pLAYER_01_USER, c_cameraValueRoll, 0.0, 0.0, -1, 10.0);
+    CameraSetValue(gv_pLAYER_01_USER, c_cameraValueFieldOfView, 20.0, 0.0, -1, 10.0);
+    CameraUseHeightDisplacement(gv_pLAYER_01_USER, false);
+    CameraUseHeightSmoothing(gv_pLAYER_01_USER, false);
+    libNtve_gf_HideGameUI(false, PlayerGroupAll());
+    UISetDragSelectEnabled(PlayerGroupAll(), false);
+    TriggerExecute(gt_ShuttleInit, true, false);
     return true;
 }
 
@@ -246,12 +955,187 @@ void gt_KeyUp_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Shuttle Init
+//--------------------------------------------------------------------------------------------------
+bool gt_ShuttleInit_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ShuttleInitializationQ, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ShuttleInit_Init () {
+    gt_ShuttleInit = TriggerCreate("gt_ShuttleInit_Func");
+    TriggerAddEventChatMessage(gt_ShuttleInit, c_playerAny, "Start", true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Shuttle Initialization Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ShuttleInitializationQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ShuttleEnvironment, true, true);
+    TriggerExecute(gt_ShuttleObjects, true, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ShuttleInitializationQ_Init () {
+    gt_ShuttleInitializationQ = TriggerCreate("gt_ShuttleInitializationQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Shuttle Environment
+//--------------------------------------------------------------------------------------------------
+bool gt_ShuttleEnvironment_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ShuttleEnvironment_Init () {
+    gt_ShuttleEnvironment = TriggerCreate("gt_ShuttleEnvironment_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Shuttle Objects
+//--------------------------------------------------------------------------------------------------
+bool gt_ShuttleObjects_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libWASD_gf_CreateButton(PointFromId(932730890), 225.0, libWASD_ge_ButtonType_Control, true, "CastanarMonitorFloor", 1, 40.0);
+    gv_obj_InfirmaryControl = UnitLastCreated();
+    TriggerEnable(gt_ShuttleInfirmaryControlApproach, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ShuttleObjects_Init () {
+    gt_ShuttleObjects = TriggerCreate("gt_ShuttleObjects_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Shuttle-Infirmary Control
+//--------------------------------------------------------------------------------------------------
+bool gt_ShuttleInfirmaryControl_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    unitgroup auto5B498E7A_g;
+    int auto5B498E7A_u;
+    unit auto5B498E7A_var;
+
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetOwner(EventUnit()) == 0))) {
+            return false;
+        }
+
+        if (!((UnitGetCustomValue(gv_obj_InfirmaryControl, 0) == 1.0))) {
+            return false;
+        }
+
+        if (!((UnitGetCustomValue(EventUnit(), 1) == IntToFixed((libWASD_ge_ButtonType_Control))))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    UnitSelect(EventUnit(), 1, false);
+    libNtve_gf_SendActorMessageToUnit(gv_obj_InfirmaryControl, "HaloStop");
+    UnitSetState(EventUnit(), c_unitStateCursorable, false);
+    UnitSetState(EventUnit(), c_unitStateHighlightable, false);
+    UnitSetState(EventUnit(), c_unitStateSelectable, false);
+    UnitSetState(EventUnit(), c_unitStateTargetable, false);
+    libNtve_gf_SendActorMessageToGameRegion(RegionFromId(1), "AnimBracketStart {} Stand,Unpowered,Start Stand,Unpowered {} ContentNonLooping,OpeningPlayForever,FullMatch");
+    Wait(0.3, c_timeGame);
+    auto5B498E7A_g = UnitGroup(null, 0, RegionFromId(1), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto5B498E7A_u = UnitGroupCount(auto5B498E7A_g, c_unitCountAll);
+    for (;; auto5B498E7A_u -= 1) {
+        auto5B498E7A_var = UnitGroupUnitFromEnd(auto5B498E7A_g, auto5B498E7A_u);
+        if (auto5B498E7A_var == null) { break; }
+        UnitKill(auto5B498E7A_var);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ShuttleInfirmaryControl_Init () {
+    gt_ShuttleInfirmaryControl = TriggerCreate("gt_ShuttleInfirmaryControl_Func");
+    TriggerEnable(gt_ShuttleInfirmaryControl, false);
+    TriggerAddEventUnitSelected(gt_ShuttleInfirmaryControl, UnitRefFromVariable("gv_obj_InfirmaryControl"), gv_pLAYER_01_USER, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Shuttle-Infirmary Control Approach
+//--------------------------------------------------------------------------------------------------
+bool gt_ShuttleInfirmaryControlApproach_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetOwner(EventUnit()) == 1))) {
+            return false;
+        }
+
+        if (!((UnitGetCustomValue(gv_obj_InfirmaryControl, 1) == IntToFixed((libWASD_ge_ButtonType_Control))))) {
+            return false;
+        }
+
+        if (!((UnitGetCustomValue(gv_obj_InfirmaryControl, 0) == 1.0))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_SendActorMessageToUnit(gv_obj_InfirmaryControl, "HaloStart");
+    libNtve_gf_SendActorMessageToUnit(gv_obj_InfirmaryControl, "HaloSetColor 115,198,204");
+    UnitSetState(gv_obj_InfirmaryControl, c_unitStateSelectable, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ShuttleInfirmaryControlApproach_Init () {
+    gt_ShuttleInfirmaryControlApproach = TriggerCreate("gt_ShuttleInfirmaryControlApproach_Func");
+    TriggerEnable(gt_ShuttleInfirmaryControlApproach, false);
+    TriggerAddEventUnitRangePoint(gt_ShuttleInfirmaryControlApproach, null, PointFromId(932730890), 2.0, true);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
     gt_Init_Init();
     gt_KeyDown_Init();
     gt_KeyUp_Init();
+    gt_ShuttleInit_Init();
+    gt_ShuttleInitializationQ_Init();
+    gt_ShuttleEnvironment_Init();
+    gt_ShuttleObjects_Init();
+    gt_ShuttleInfirmaryControl_Init();
+    gt_ShuttleInfirmaryControlApproach_Init();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -259,5 +1143,6 @@ void InitTriggers () {
 //--------------------------------------------------------------------------------------------------
 void InitMap () {
     InitLibs();
+    InitGlobals();
     InitTriggers();
 }

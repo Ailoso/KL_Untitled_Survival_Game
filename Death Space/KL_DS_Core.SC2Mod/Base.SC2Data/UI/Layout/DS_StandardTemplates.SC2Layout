@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Desc>
+    <Frame type="Frame" name="GameuI/UIContainer/FullscreenUpperContainer" file="GameUI">
+
+        <Frame type="Frame" name="DSUIContainer">
+            <Anchor relative="$parent"/>
+        </Frame>
+    </Frame>
+</Desc>

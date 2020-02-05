@@ -13,5 +13,9 @@
             <LayoutButtons index="4" removed="1"/>
             <LayoutButtons index="5" removed="1"/>
         </CardLayouts>
+        <Sight value="3"/>
+        <Speed value="0.8984"/>
+        <Radius value="0.1875"/>
+        <InnerRadius value="0.1875"/>
     </CUnit>
 </Catalog>

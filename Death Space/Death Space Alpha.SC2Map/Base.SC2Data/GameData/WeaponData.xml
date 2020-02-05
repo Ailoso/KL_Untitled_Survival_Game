@@ -2,5 +2,6 @@
 <Catalog>
     <CWeaponLegacy id="Separatist">
         <MinScanRange value="1"/>
+        <Range value="3"/>
     </CWeaponLegacy>
 </Catalog>

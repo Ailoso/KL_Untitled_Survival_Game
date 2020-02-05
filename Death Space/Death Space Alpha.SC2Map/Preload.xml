@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Preload>
 <Actor id="SYSTEM_ActorConfig"/>
-<Terrain id="HybridLabInner"/>
+<Actor id="LightOmniWhiteLarge"/>
+<Actor id="Blast_Craters" Variations="0,2"/>
+<Actor id="BrokenPlating" Variations="1,2,4"/>
+<Actor id="CompoundSewers_FuelingPipes" Variations="13"/>
+<Actor id="DOM_Groundlights" Variations="1"/>
+<Actor id="DOM_Walls_Caps_Interior" Variations="4,5"/>
+<Actor id="DOM_Walls_Interior" Variations="0,1"/>
+<Actor id="Korhal_Platform_PlateWall" Variations="0,1"/>
+<Actor id="SpacePrisonPlatformScaffold" Variations="0"/>
+<Actor id="UmojanLabAlarms"/>
+<Actor id="UmojanLabDebrisDoodad" Variations="0,1,4"/>
+<Actor id="UmojanLabGlassWallPanel" Variations="0"/>
+<Actor id="UmojanLabLabGate" Variations="1"/>
+<Actor id="UmojanLabMonitorFloor" Variations="2"/>
+<Actor id="UmojanLabPillar1High" Variations="1"/>
+<Actor id="UmojanLabWallDebris" Variations="0,1,2,4,5"/>
+<Actor id="UmojanLabWallPanel1High" Variations="11"/>
+<Actor id="UmojanLabWallPanel2High" Variations="1,4,6,7,8"/>
+<Actor id="UnbuildablePlates" Variations="2"/>
+<Actor id="CastanarStasisTubeDebris" Variations="1"/>
+<Actor id="CastanarStasisTubeWall" Variations="2"/>
+<Actor id="FireMedium"/>
+<Actor id="MetalGateDiagonal"/>
+<Actor id="SpacePlatformCablesLarge" Variations="0"/>
+<Actor id="InstallationRoof" Variations="0"/>
+<Actor id="CastanarStasisTubeWallDestroyed" Variations="0,1"/>
+<Actor id="UmojanLabCrashSiteSmallDoodad"/>
+<Behavior id="Flashlight"/>
+<Effect id="RaynorGaussRifleDamage"/>
+<Light id="SMStarmapPlanetTest"/>
+<Model id="CastanarMonitorFloor"/>
+<Sound id="Marine_AttackLaunch"/>
+<Sound id="WidowMine_ArmedBeep" Variations="0"/>
+<Terrain id="ShadowCorpsPlatform"/>
+<Unit id="SCV"/>
+<Unit id="PathingBlocker1x1"/>
+<Unit id="InvisibleTargetDummy"/>
+<Unit id="PathingBlocker1x1Diagonal"/>
 <Unit id="Separatist"/>
 </Preload>
