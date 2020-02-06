@@ -68,7 +68,6 @@ Trigger/Name/lib_WASD_DD7C42AA=Click
 Trigger/Name/lib_WASD_EE369E7E=Reload
 Variable/Name/1B612E88=Player
 Variable/Name/3C9BC6A6=Obj_InfirmaryControl
-Variable/Name/4D873AD9=Obj_InfirmaryControl 2
 Variable/Name/52BD38BD=PLAYER_01_MAP_OJBECTS
 Variable/Name/74832959=PLAYER_01_USER
 Variable/Name/AA8479D0=AimingDown

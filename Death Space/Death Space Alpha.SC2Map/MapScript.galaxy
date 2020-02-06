@@ -106,8 +106,6 @@ void libWASD_gf_CreateButton (point lp_location, fixed lp_angle, int lp_type, bo
     // Implementation
     UnitCreate(1, "InvisibleTargetDummy", c_unitCreateIgnorePlacement, 0, lp_location, lp_angle);
     lv_object = UnitLastCreated();
-    libNtve_gf_CreateUnitsWithDefaultFacing(1, "PathingBlocker1x1", 0, 0, lp_location);
-    libNtve_gf_CreateUnitsWithDefaultFacing(1, "PathingBlocker1x1Diagonal", 0, 0, lp_location);
     UnitSetScale(lv_object, lp_scale, lp_scale, lp_scale);
     ActorSend(libNtve_gf_MainActorofUnit(lv_object), libNtve_gf_ModelSwap(lp_model, lp_variation));
     libNtve_gf_SendActorMessageToUnit(lv_object, "HaloSetColor 115,198,204");
@@ -859,7 +857,6 @@ const int gv_pLAYER_02_ZERG = 2;
 unit gv_player;
 bool gv_aimingDown;
 unit gv_obj_InfirmaryControl;
-unit gv_obj_InfirmaryControl2;
 
 void InitGlobals () {
     gv_player = UnitFromId(2075027713);
@@ -877,6 +874,7 @@ trigger gt_ShuttleEnvironment;
 trigger gt_ShuttleObjects;
 trigger gt_ShuttleInfirmaryControl;
 trigger gt_ShuttleInfirmaryControlApproach;
+trigger gt_ShuttleInfirmaryControlLeave;
 
 //--------------------------------------------------------------------------------------------------
 // Trigger: Init
@@ -1001,6 +999,13 @@ void gt_ShuttleInitializationQ_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_ShuttleEnvironment_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    CameraShakeStart(gv_pLAYER_01_USER, c_cameraPositionEye, c_cameraDirectionXY, 0.05, 0.0001, 10.0, 0.0);
+    UnitSetPropertyFixed(libWASD_gv_playerUnit, c_unitPropMovementSpeed, 0.55);
     return true;
 }
 
@@ -1021,7 +1026,6 @@ bool gt_ShuttleObjects_Func (bool testConds, bool runActions) {
 
     libWASD_gf_CreateButton(PointFromId(932730890), 225.0, libWASD_ge_ButtonType_Control, true, "CastanarMonitorFloor", 1, 40.0);
     gv_obj_InfirmaryControl = UnitLastCreated();
-    TriggerEnable(gt_ShuttleInfirmaryControlApproach, true);
     return true;
 }
 
@@ -1081,7 +1085,6 @@ bool gt_ShuttleInfirmaryControl_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_ShuttleInfirmaryControl_Init () {
     gt_ShuttleInfirmaryControl = TriggerCreate("gt_ShuttleInfirmaryControl_Func");
-    TriggerEnable(gt_ShuttleInfirmaryControl, false);
     TriggerAddEventUnitSelected(gt_ShuttleInfirmaryControl, UnitRefFromVariable("gv_obj_InfirmaryControl"), gv_pLAYER_01_USER, true);
 }
 
@@ -1089,6 +1092,42 @@ void gt_ShuttleInfirmaryControl_Init () {
 // Trigger: Shuttle-Infirmary Control Approach
 //--------------------------------------------------------------------------------------------------
 bool gt_ShuttleInfirmaryControlApproach_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetOwner(EventUnit()) == 1))) {
+            return false;
+        }
+
+        if (!((UnitGetCustomValue(gv_obj_InfirmaryControl, 1) == IntToFixed((libWASD_ge_ButtonType_Control))))) {
+            return false;
+        }
+
+        if (!((UnitGetCustomValue(gv_obj_InfirmaryControl, 0) != 0.0))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitSetState(gv_obj_InfirmaryControl, c_unitStateSelectable, true);
+    libNtve_gf_SendActorMessageToUnit(gv_obj_InfirmaryControl, "HaloStart");
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ShuttleInfirmaryControlApproach_Init () {
+    gt_ShuttleInfirmaryControlApproach = TriggerCreate("gt_ShuttleInfirmaryControlApproach_Func");
+    TriggerAddEventUnitRangePoint(gt_ShuttleInfirmaryControlApproach, null, PointFromId(932730890), 1.2, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Shuttle-Infirmary Control Leave
+//--------------------------------------------------------------------------------------------------
+bool gt_ShuttleInfirmaryControlLeave_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
@@ -1110,17 +1149,15 @@ bool gt_ShuttleInfirmaryControlApproach_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libNtve_gf_SendActorMessageToUnit(gv_obj_InfirmaryControl, "HaloStart");
-    libNtve_gf_SendActorMessageToUnit(gv_obj_InfirmaryControl, "HaloSetColor 115,198,204");
-    UnitSetState(gv_obj_InfirmaryControl, c_unitStateSelectable, true);
+    libNtve_gf_SendActorMessageToUnit(gv_obj_InfirmaryControl, "HaloStop");
+    UnitSetState(gv_obj_InfirmaryControl, c_unitStateSelectable, false);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void gt_ShuttleInfirmaryControlApproach_Init () {
-    gt_ShuttleInfirmaryControlApproach = TriggerCreate("gt_ShuttleInfirmaryControlApproach_Func");
-    TriggerEnable(gt_ShuttleInfirmaryControlApproach, false);
-    TriggerAddEventUnitRangePoint(gt_ShuttleInfirmaryControlApproach, null, PointFromId(932730890), 2.0, true);
+void gt_ShuttleInfirmaryControlLeave_Init () {
+    gt_ShuttleInfirmaryControlLeave = TriggerCreate("gt_ShuttleInfirmaryControlLeave_Func");
+    TriggerAddEventUnitRegion(gt_ShuttleInfirmaryControlLeave, null, RegionCircle(PointFromId(932730890), 1.2), false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1136,6 +1173,7 @@ void InitTriggers () {
     gt_ShuttleObjects_Init();
     gt_ShuttleInfirmaryControl_Init();
     gt_ShuttleInfirmaryControlApproach_Init();
+    gt_ShuttleInfirmaryControlLeave_Init();
 }
 
 //--------------------------------------------------------------------------------------------------
