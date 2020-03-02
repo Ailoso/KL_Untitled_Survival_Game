@@ -14,7 +14,14 @@ include "TriggerLibs/NativeLib"
 const int libWASD_ge_ButtonType_Control = 0;
 const int libWASD_ge_ButtonType_LootChest = 1;
 
+// Structures
+struct libWASD_gs_SlotData {
+    string[2] lv_itemID;
+};
+
 // Variable Declarations
+bank libWASD_gv_dS_PlayerBank;
+libWASD_gs_SlotData libWASD_gv_slotData;
 int[17] libWASD_gv_wASDState;
 unit[17] libWASD_gv_controlledUnits;
 bool libWASD_gv_aimingDown;
@@ -38,6 +45,9 @@ unit libWASD_gv_targetUnit;
 point libWASD_gv_targetPoint;
 
 // Function Declarations
+void libWASD_gf_DS_InitializeInventory ();
+void libWASD_gf_DS_BankPopulation ();
+int libWASD_gf_ReturnItemID (string lp_instance);
 void libWASD_gf_CreateButton (point lp_location, fixed lp_angle, int lp_type, bool lp_active, string lp_model, int lp_variation, fixed lp_scale);
 void libWASD_gf_EnableDisableButton (bool lp_enableDisable, unit lp_object);
 fixed libWASD_gf_GetWASDAngle (int lp_player);
@@ -49,6 +59,7 @@ void libWASD_gf_Traceline (int lp_player);
 void libWASD_gf_Fire (int lp_shots);
 
 // Trigger Declarations
+trigger libWASD_gt_DS_Initialization;
 trigger libWASD_gt_RightClicking;
 trigger libWASD_gt_RightClickRelease;
 trigger libWASD_gt_RightClickDown;
@@ -94,6 +105,55 @@ void libWASD_InitVariables () {
 
 // Presets
 // Functions
+void libWASD_gf_DS_InitializeInventory () {
+    // Automatic Variable Declarations
+    // Implementation
+    BankLoad("DS_PD", 1);
+    libWASD_gv_dS_PlayerBank = BankLastCreated();
+    if ((BankValueGetAsFlag(libWASD_gv_dS_PlayerBank, "GD", "Initialized") != true)) {
+        libWASD_gf_DS_BankPopulation();
+    }
+
+}
+
+void libWASD_gf_DS_BankPopulation () {
+    // Variable Declarations
+    int lv_index;
+    int lv_index2;
+    const int lv_inventoryX = 4;
+    const int lv_intentoryY = 5;
+
+    // Automatic Variable Declarations
+    const int auto64A7ECBD_ae = lv_inventoryX;
+    const int auto64A7ECBD_ai = 1;
+    int autoF48B6C2C_ae;
+    const int autoF48B6C2C_ai = 1;
+
+    // Variable Initialization
+
+    // Implementation
+    BankValueSetFromInt(libWASD_gv_dS_PlayerBank, "PI", "X", 4);
+    BankValueSetFromInt(libWASD_gv_dS_PlayerBank, "PI", "Y", 5);
+    lv_index = 1;
+    for ( ; ( (auto64A7ECBD_ai >= 0 && lv_index <= auto64A7ECBD_ae) || (auto64A7ECBD_ai < 0 && lv_index >= auto64A7ECBD_ae) ) ; lv_index += auto64A7ECBD_ai ) {
+        autoF48B6C2C_ae = lv_index2;
+        lv_index2 = 1;
+        for ( ; ( (autoF48B6C2C_ai >= 0 && lv_index2 <= autoF48B6C2C_ae) || (autoF48B6C2C_ai < 0 && lv_index2 >= autoF48B6C2C_ae) ) ; lv_index2 += autoF48B6C2C_ai ) {
+            BankValueSetFromInt(BankLastCreated(), ("Slot" + IntToString(lv_index) + "," + IntToString(lv_index2)), "ItemID", 0);
+            BankValueSetFromInt(BankLastCreated(), ("Slot" + IntToString(lv_index) + "," + IntToString(lv_index2)), "ItemQuantity", 0);
+            BankValueSetFromInt(BankLastCreated(), ("Slot" + IntToString(lv_index) + "," + IntToString(lv_index2)), "ItemDurability", 0);
+        }
+    }
+    BankValueSetFromFlag(BankLastCreated(), "GD", "Initialized", true);
+    BankSave(libWASD_gv_dS_PlayerBank);
+}
+
+int libWASD_gf_ReturnItemID (string lp_instance) {
+    // Automatic Variable Declarations
+    // Implementation
+    return libNtve_gf_UserDataInstanceGetIndex("Items", lp_instance);
+}
+
 void libWASD_gf_CreateButton (point lp_location, fixed lp_angle, int lp_type, bool lp_active, string lp_model, int lp_variation, fixed lp_scale) {
     // Variable Declarations
     unit lv_object;
@@ -335,6 +395,26 @@ bool auto_libWASD_gf_Fire_TriggerFunc (bool testConds, bool runActions) {
 }
 
 // Triggers
+//--------------------------------------------------------------------------------------------------
+// Trigger: DS_Initialization
+//--------------------------------------------------------------------------------------------------
+bool libWASD_gt_DS_Initialization_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libWASD_gf_DS_InitializeInventory();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWASD_gt_DS_Initialization_Init () {
+    libWASD_gt_DS_Initialization = TriggerCreate("libWASD_gt_DS_Initialization_Func");
+    TriggerAddEventMapInit(libWASD_gt_DS_Initialization);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Trigger: Right Clicking
 //--------------------------------------------------------------------------------------------------
@@ -805,6 +885,7 @@ void libWASD_gt_PressFFlashlight_Init () {
 }
 
 void libWASD_InitTriggers () {
+    libWASD_gt_DS_Initialization_Init();
     libWASD_gt_RightClicking_Init();
     libWASD_gt_RightClickRelease_Init();
     libWASD_gt_RightClickDown_Init();
@@ -857,6 +938,7 @@ const int gv_pLAYER_02_ZERG = 2;
 unit gv_player;
 bool gv_aimingDown;
 unit gv_obj_InfirmaryControl;
+unit gv_obj_StorageControl;
 
 void InitGlobals () {
     gv_player = UnitFromId(2075027713);
@@ -875,6 +957,9 @@ trigger gt_ShuttleObjects;
 trigger gt_ShuttleInfirmaryControl;
 trigger gt_ShuttleInfirmaryControlApproach;
 trigger gt_ShuttleInfirmaryControlLeave;
+trigger gt_ShuttleStorageControl;
+trigger gt_ShuttleStorageControlApproach;
+trigger gt_ShuttleStorageControlLeave;
 
 //--------------------------------------------------------------------------------------------------
 // Trigger: Init
@@ -1005,7 +1090,6 @@ bool gt_ShuttleEnvironment_Func (bool testConds, bool runActions) {
     }
 
     CameraShakeStart(gv_pLAYER_01_USER, c_cameraPositionEye, c_cameraDirectionXY, 0.05, 0.0001, 10.0, 0.0);
-    UnitSetPropertyFixed(libWASD_gv_playerUnit, c_unitPropMovementSpeed, 0.55);
     return true;
 }
 
@@ -1026,6 +1110,8 @@ bool gt_ShuttleObjects_Func (bool testConds, bool runActions) {
 
     libWASD_gf_CreateButton(PointFromId(932730890), 225.0, libWASD_ge_ButtonType_Control, true, "CastanarMonitorFloor", 1, 40.0);
     gv_obj_InfirmaryControl = UnitLastCreated();
+    libWASD_gf_CreateButton(PointFromId(1597877810), 135.0, libWASD_ge_ButtonType_Control, true, "CastanarMonitorFloor", 1, 40.0);
+    gv_obj_StorageControl = UnitLastCreated();
     return true;
 }
 
@@ -1066,10 +1152,12 @@ bool gt_ShuttleInfirmaryControl_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     UnitSelect(EventUnit(), 1, false);
     libNtve_gf_SendActorMessageToUnit(gv_obj_InfirmaryControl, "HaloStop");
+    TriggerEnable(gt_ShuttleStorageControlApproach, false);
     UnitSetState(EventUnit(), c_unitStateCursorable, false);
     UnitSetState(EventUnit(), c_unitStateHighlightable, false);
     UnitSetState(EventUnit(), c_unitStateSelectable, false);
     UnitSetState(EventUnit(), c_unitStateTargetable, false);
+    Wait(0.4, c_timeGame);
     libNtve_gf_SendActorMessageToGameRegion(RegionFromId(1), "AnimBracketStart {} Stand,Unpowered,Start Stand,Unpowered {} ContentNonLooping,OpeningPlayForever,FullMatch");
     Wait(0.3, c_timeGame);
     auto5B498E7A_g = UnitGroup(null, 0, RegionFromId(1), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
@@ -1161,6 +1249,134 @@ void gt_ShuttleInfirmaryControlLeave_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Shuttle-Storage Control
+//--------------------------------------------------------------------------------------------------
+bool gt_ShuttleStorageControl_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    unitgroup auto7D544EB0_g;
+    int auto7D544EB0_u;
+    unit auto7D544EB0_var;
+
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetOwner(EventUnit()) == 0))) {
+            return false;
+        }
+
+        if (!((UnitGetCustomValue(gv_obj_InfirmaryControl, 0) == 1.0))) {
+            return false;
+        }
+
+        if (!((UnitGetCustomValue(EventUnit(), 1) == IntToFixed((libWASD_ge_ButtonType_Control))))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    UnitSelect(EventUnit(), 1, false);
+    libNtve_gf_SendActorMessageToUnit(gv_obj_StorageControl, "HaloStop");
+    TriggerEnable(gt_ShuttleInfirmaryControlApproach, false);
+    UnitSetState(EventUnit(), c_unitStateCursorable, false);
+    UnitSetState(EventUnit(), c_unitStateHighlightable, false);
+    UnitSetState(EventUnit(), c_unitStateSelectable, false);
+    UnitSetState(EventUnit(), c_unitStateTargetable, false);
+    Wait(0.8, c_timeGame);
+    libNtve_gf_SendActorMessageToGameRegion(RegionFromId(3), "AnimBracketStart {} Stand,Unpowered,Start Stand,Unpowered {} ContentNonLooping,OpeningPlayForever,FullMatch");
+    Wait(0.3, c_timeGame);
+    auto7D544EB0_g = UnitGroup(null, 0, RegionFromId(3), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto7D544EB0_u = UnitGroupCount(auto7D544EB0_g, c_unitCountAll);
+    for (;; auto7D544EB0_u -= 1) {
+        auto7D544EB0_var = UnitGroupUnitFromEnd(auto7D544EB0_g, auto7D544EB0_u);
+        if (auto7D544EB0_var == null) { break; }
+        UnitKill(auto7D544EB0_var);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ShuttleStorageControl_Init () {
+    gt_ShuttleStorageControl = TriggerCreate("gt_ShuttleStorageControl_Func");
+    TriggerAddEventUnitSelected(gt_ShuttleStorageControl, UnitRefFromVariable("gv_obj_StorageControl"), gv_pLAYER_01_USER, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Shuttle-Storage Control Approach
+//--------------------------------------------------------------------------------------------------
+bool gt_ShuttleStorageControlApproach_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetOwner(EventUnit()) == 1))) {
+            return false;
+        }
+
+        if (!((UnitGetCustomValue(gv_obj_StorageControl, 1) == IntToFixed((libWASD_ge_ButtonType_Control))))) {
+            return false;
+        }
+
+        if (!((UnitGetCustomValue(gv_obj_StorageControl, 0) != 0.0))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitSetState(gv_obj_StorageControl, c_unitStateSelectable, true);
+    libNtve_gf_SendActorMessageToUnit(gv_obj_StorageControl, "HaloStart");
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ShuttleStorageControlApproach_Init () {
+    gt_ShuttleStorageControlApproach = TriggerCreate("gt_ShuttleStorageControlApproach_Func");
+    TriggerAddEventUnitRangePoint(gt_ShuttleStorageControlApproach, null, PointFromId(1597877810), 1.2, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Shuttle-Storage Control Leave
+//--------------------------------------------------------------------------------------------------
+bool gt_ShuttleStorageControlLeave_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetOwner(EventUnit()) == 1))) {
+            return false;
+        }
+
+        if (!((UnitGetCustomValue(gv_obj_StorageControl, 1) == IntToFixed((libWASD_ge_ButtonType_Control))))) {
+            return false;
+        }
+
+        if (!((UnitGetCustomValue(gv_obj_StorageControl, 0) == 1.0))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_SendActorMessageToUnit(gv_obj_StorageControl, "HaloStop");
+    UnitSetState(gv_obj_StorageControl, c_unitStateSelectable, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ShuttleStorageControlLeave_Init () {
+    gt_ShuttleStorageControlLeave = TriggerCreate("gt_ShuttleStorageControlLeave_Func");
+    TriggerAddEventUnitRegion(gt_ShuttleStorageControlLeave, null, RegionCircle(PointFromId(1597877810), 1.2), false);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
@@ -1174,6 +1390,9 @@ void InitTriggers () {
     gt_ShuttleInfirmaryControl_Init();
     gt_ShuttleInfirmaryControlApproach_Init();
     gt_ShuttleInfirmaryControlLeave_Init();
+    gt_ShuttleStorageControl_Init();
+    gt_ShuttleStorageControlApproach_Init();
+    gt_ShuttleStorageControlLeave_Init();
 }
 
 //--------------------------------------------------------------------------------------------------

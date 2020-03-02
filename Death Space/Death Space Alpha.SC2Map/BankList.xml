@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <BankList>
+    <Bank Name="DS_PD" Player="1"/>
+    <Bank Name="DS_MA" Player="1"/>
     <Bank Name="ZDebugProgress" Player="1"/>
     <Bank Name="TCampaign" Player="1"/>
     <Bank Name="PStoryTransition" Player="1"/>

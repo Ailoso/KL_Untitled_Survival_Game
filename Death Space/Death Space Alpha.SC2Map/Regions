@@ -15,4 +15,19 @@
             <radius value="1.5"/>
         </shape>
     </region>
+    <region id="3">
+        <name value="Shuttle_StorageDoor"/>
+        <shape type="diamond">
+            <center value="20.5886,10.5947"/>
+            <width value="2.322"/>
+            <height value="1.6296"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="Shuttle_InfirmaryApproach"/>
+        <shape type="circle">
+            <center value="21.19,18.1433"/>
+            <radius value="1.1523"/>
+        </shape>
+    </region>
 </Regions>

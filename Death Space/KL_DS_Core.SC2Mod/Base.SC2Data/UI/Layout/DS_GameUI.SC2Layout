@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Desc>
+    <Frame type="Frame" name="GameUI/UIContainer/FullscreenUpperContainer" file="GameUI">
+
+        <Frame type="Frame" name="InventroyFrame" template="DS_InventoryTemplates/CharacterFrameTemplate">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="155"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-300"/>
+        </Frame>
+    </Frame>
+</Desc>

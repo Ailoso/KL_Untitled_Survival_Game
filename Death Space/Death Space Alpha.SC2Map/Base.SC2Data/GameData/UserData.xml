@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <!--Durability 0 = Indestructible-->
+    <CUser id="Items">
+        <Fields Id="Name" Type="String" EditorColumn="1"/>
+        <Fields Id="Max Durability" Type="Int" EditorColumn="2"/>
+        <Fields Id="Max Quantity" Type="Int" EditorColumn="3"/>
+        <Fields Id="Icon" Type="Image" EditorColumn="4"/>
+        <Fields Id="Category" Type="String" EditorColumn="5"/>
+        <Instances Id="[Default]"/>
+        <Instances Id="Simple Materials">
+            <Image>
+                <Field Id="Icon"/>
+            </Image>
+            <Int Int="25">
+                <Field Id="Max Quantity"/>
+            </Int>
+            <String String="Simple Materials">
+                <Field Id="Name"/>
+            </String>
+            <String String="Materials">
+                <Field Id="Category"/>
+            </String>
+        </Instances>
+    </CUser>
     <CUser id="WeaponTypes"/>
 </Catalog>

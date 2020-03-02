@@ -6,4 +6,8 @@
     <Dependencies>
         <Value>file:Mods\Koprulu\Death Space\KL_DS_Core.SC2Mod</Value>
     </Dependencies>
+    <Preload>
+        <Value>Bank;DS_PD</Value>
+        <Value>Bank;DS_MA</Value>
+    </Preload>
 </DocInfo>

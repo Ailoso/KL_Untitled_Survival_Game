@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PlacedObjects Version="27">
-    <ObjectUnit Id="1729314995" Position="20,10,0" Rotation="1.1027" Scale="1,1,1" UnitType="PathingBlocker1x1Diagonal">
+    <ObjectUnit Id="1729314995" Position="21,10,0" Rotation="1.1027" Scale="1,1,1" UnitType="PathingBlocker1x1Diagonal">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="86640445" Position="21.5,15.5,0" Rotation="1.3176" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
-    <ObjectUnit Id="339774345" Position="21,11,0" Rotation="1.1027" Scale="1,1,1" UnitType="PathingBlocker1x1Diagonal">
+    <ObjectUnit Id="531007305" Position="20.5,9.5,0" Rotation="2.5437" Scale="1,1,1" UnitType="PathingBlocker1x1">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="2075027713" Position="15.9306,15.2595,0" Rotation="3.7541" Scale="1,1,1" UnitType="Separatist" Player="1">
@@ -16,7 +16,7 @@
     <ObjectUnit Id="1413938583" Position="23,17,0" Rotation="1.1027" Scale="1,1,1" UnitType="PathingBlocker1x1Diagonal">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="817226662" Position="20.5,10.5,0" Rotation="2.544" Scale="1,1,1" UnitType="PathingBlocker1x1">
+    <ObjectUnit Id="817226662" Position="21.5,10.5,0" Rotation="2.544" Scale="1,1,1" UnitType="PathingBlocker1x1">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="2020273276" Position="22.5,16.5,0" Rotation="2.5437" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
@@ -36,10 +36,14 @@
         <Flag Index="ForcePlacement" Value="1"/>
         <Flag Index="NoDoodadFootprint" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="1373988627" Position="20.64,10.48,7.9995" Rotation="3.1413" Scale="0.5,0.5,0.5" Type="MetalGateDiagonal">
+    <ObjectDoodad Id="1373988627" Position="20.855,10.3195,7.9995" Rotation="3.1413" Scale="0.5,0.5,0.5" Type="MetalGateDiagonal">
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
         <Flag Index="NoDoodadFootprint" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="1910501297" Variation="11" Position="23.3127,5.8024,9.0932" Rotation="3.9267" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+        <Flag Index="HeightOffset" Value="1"/>
+        <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="222488910" Variation="1" Position="28.5563,12.0151,5.848" Rotation="0.7851" Scale="1,1,1" Type="Korhal_Platform_PlateWall">
         <Flag Index="HeightOffset" Value="1"/>
@@ -59,7 +63,7 @@
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="635656298" Variation="11" Position="33.0266,18.9645,9.1381" Rotation="5.4975" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+    <ObjectDoodad Id="635656298" Variation="11" Position="32.5444,19.525,9.1816" Rotation="5.4975" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
@@ -71,6 +75,10 @@
     <ObjectDoodad Id="856040087" Variation="1" Position="28.1313,22.788,8.1013" Rotation="2.7717" Scale="1.1682,1.1682,1.1682" Type="BrokenPlating">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
+        <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="1137145683" Variation="11" Position="28.9553,11.4284,9.1035" Rotation="3.9267" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+        <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="149121571" Variation="11" Position="26.6606,20.9401,8.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
@@ -93,7 +101,7 @@
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="282307803" Variation="11" Position="14.9902,11.7912,9.0212" Rotation="2.356" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+    <ObjectDoodad Id="282307803" Variation="8" Position="14.9902,11.7912,9.0212" Rotation="2.356" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
@@ -107,7 +115,12 @@
         <Flag Index="ForcePlacement" Value="1"/>
         <Flag Index="NoDoodadFootprint" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="138096905" Variation="5" Position="28.0446,18.0444,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Caps_Interior">
+    <ObjectDoodad Id="138096905" Variation="5" Position="28.0888,18.054,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Caps_Interior">
+        <Flag Index="HeightAbsolute" Value="1"/>
+        <Flag Index="ForcePlacement" Value="1"/>
+        <Flag Index="NoDoodadFootprint" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="2135825310" Variation="2" Position="17.2998,15.0498,7.9982" Rotation="0.6323" Scale="0.3996,0.3996,0.3996" Type="UnbuildablePlates">
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
         <Flag Index="NoDoodadFootprint" Value="1"/>
@@ -117,7 +130,7 @@
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="579143800" Variation="4" Position="29.918,19.77,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Caps_Interior">
+    <ObjectDoodad Id="579143800" Variation="4" Position="29.9726,19.7802,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Caps_Interior">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="702597974" Variation="1" Position="16.5397,19.5698,9.562" Rotation="0.7851" Scale="0.3996,0.3996,0.3996" Type="UmojanLabWallPanel2High">
@@ -134,6 +147,10 @@
     </ObjectDoodad>
     <ObjectDoodad Id="420846010" Variation="2" Position="27.7597,23.5397,8.0212" Rotation="2.7717" Scale="1.1682,1.1682,1.1682" Type="BrokenPlating">
         <Flag Index="HeightAbsolute" Value="1"/>
+        <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="994218144" Variation="11" Position="33.9372,18.1997,9.059" Rotation="5.4973" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+        <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="1155661342" Position="14,14,5.8652" Rotation="4.7121" Scale="1,1,1" Type="Korhal_Platform_PlateWall">
@@ -153,6 +170,10 @@
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
         <Flag Index="NoDoodadFootprint" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="57215344" Variation="11" Position="26.12,8.609,9.0751" Rotation="3.9267" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+        <Flag Index="HeightOffset" Value="1"/>
+        <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="1316388240" Position="15.99,12.6198,7.9995" Rotation="1.6955" Scale="0.7998,0.7998,0.7998" Type="FireMedium">
         <Flag Index="HeightAbsolute" Value="1"/>
@@ -209,10 +230,14 @@
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="513147455" Position="20.0488,8.4265,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
+    <ObjectDoodad Id="948367597" Variation="11" Position="34.0292,17.1584,9.0031" Rotation="4.7121" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+        <Flag Index="HeightOffset" Value="1"/>
+        <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="513147455" Variation="6" Position="20.0498,8.43,7.9992" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="1506682512" Variation="1" Position="31.2634,19.3508,8.0051" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
+    <ObjectDoodad Id="1506682512" Variation="6" Position="31.3198,19.3598,7.9885" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="1562247231" Position="19.88,19.8041,7.9985" Rotation="1.6953" Scale="0.7998,0.7998,0.7998" Type="FireMedium">
@@ -226,8 +251,9 @@
         <Flag Index="ForcePlacement" Value="1"/>
         <Flag Index="NoDoodadFootprint" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="1705870854" Position="29.086,18.7873,7.9995" Rotation="3.141" Scale="0.5,0.5,0.5" Type="MetalGateDiagonal">
+    <ObjectDoodad Id="1705870854" Position="29.1428,18.798,7.9995" Rotation="3.141" Scale="0.5,0.5,0.5" Type="MetalGateDiagonal">
         <Flag Index="HeightOffset" Value="1"/>
+        <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
         <Flag Index="NoDoodadFootprint" Value="1"/>
     </ObjectDoodad>
@@ -239,11 +265,15 @@
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
+    <ObjectDoodad Id="505577537" Variation="11" Position="27.5466,10.0117,9.0708" Rotation="3.9267" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+        <Flag Index="HeightOffset" Value="1"/>
+        <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
     <ObjectDoodad Id="1543960190" Position="15.9658,14.3293,8.5322" Rotation="2.945" Scale="1.182,1.182,1.182" Type="LightOmniWhiteLarge">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="120568766" Variation="11" Position="13.605,13.1728,8.992" Rotation="2.356" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+    <ObjectDoodad Id="120568766" Variation="8" Position="13.605,13.1728,8.992" Rotation="2.356" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
@@ -263,12 +293,7 @@
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="1263530772" Variation="11" Position="31.623,20.3337,9.1098" Rotation="5.4975" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
-        <Flag Index="HeightOffset" Value="1"/>
-        <Flag Index="HeightAbsolute" Value="1"/>
-        <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectDoodad>
-    <ObjectDoodad Id="580930206" Variation="1" Position="16.5847,11.4855,8.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="UmojanLabPillar1High">
+    <ObjectDoodad Id="580930206" Variation="1" Position="16.5847,11.4855,8.9997" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="UmojanLabPillar1High">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
@@ -293,7 +318,7 @@
     <ObjectDoodad Id="872087160" Position="17.9443,17.1086,7.9987" Rotation="0.272" Scale="0.5,0.5,0.5" Type="Blast_Craters">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="1037282771" Variation="11" Position="17.657,9.0278,9.022" Rotation="2.356" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+    <ObjectDoodad Id="1037282771" Variation="8" Position="17.657,9.0278,8.9997" Rotation="2.356" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
@@ -303,13 +328,25 @@
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="733294086" Position="22.874,11.1047,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
+    <ObjectDoodad Id="1272239854" Variation="11" Position="30.3818,12.8312,9.073" Rotation="3.9267" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+        <Flag Index="HeightOffset" Value="1"/>
+        <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="2090592896" Variation="11" Position="33.1762,15.6252,9.094" Rotation="3.9267" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+        <Flag Index="HeightOffset" Value="1"/>
+        <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="733294086" Position="22.863,11.092,7.9992" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="538086321" Variation="11" Position="19.04,7.686,9.022" Rotation="2.3557" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="222985356" Position="21.6477,13.8557,8.5324" Rotation="2.9448" Scale="1.182,1.182,1.182" Type="LightOmniWhiteLarge">
+        <Flag Index="HeightOffset" Value="1"/>
+        <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="1867674649" Variation="1" Position="13.23,16.3098,9.6042" Rotation="0.7851" Scale="0.3996,0.3996,0.3996" Type="UmojanLabWallPanel2High">
         <Flag Index="HeightOffset" Value="1"/>
@@ -355,10 +392,10 @@
         <Flag Index="ForcePlacement" Value="1"/>
         <Flag Index="NoDoodadFootprint" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="2047266657" Variation="1" Position="27.5375,15.7941,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
+    <ObjectDoodad Id="2047266657" Position="27.5332,15.7504,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="1455822355" Variation="1" Position="17.474,8.8251,5.8801" Rotation="5.4975" Scale="0.75,1,1" Type="Korhal_Platform_PlateWall">
+    <ObjectDoodad Id="1455822355" Variation="1" Position="17.474,8.8251,5.858" Rotation="5.4975" Scale="0.75,1,1" Type="Korhal_Platform_PlateWall">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
@@ -412,6 +449,10 @@
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
+    <ObjectDoodad Id="1750282082" Variation="11" Position="24.7395,7.2053,9.0832" Rotation="3.9267" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+        <Flag Index="HeightOffset" Value="1"/>
+        <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
     <ObjectDoodad Id="993116919" Variation="6" Position="14.3298,17.41,9.562" Rotation="0.7851" Scale="0.3996,0.3996,0.3996" Type="UmojanLabWallPanel2High">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
@@ -425,7 +466,7 @@
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="586480199" Variation="1" Position="16.1118,12.2705,7.9995" Rotation="5.5642" Scale="0.4,0.4,0.4" Type="CastanarStasisTubeDebris">
+    <ObjectDoodad Id="586480199" Variation="1" Position="16.1118,12.2705,7.9997" Rotation="5.5642" Scale="0.4,0.4,0.4" Type="CastanarStasisTubeDebris">
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
         <Flag Index="NoDoodadFootprint" Value="1"/>
@@ -433,6 +474,11 @@
     <ObjectDoodad Id="1848308853" Variation="1" Position="25.5563,9.0151,5.8596" Rotation="0.7851" Scale="1,1,1" Type="Korhal_Platform_PlateWall">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="156458240" Variation="6" Position="18.9304,16.7307,7.9982" Rotation="0.6325" Scale="0.3996,0.3996,0.3996" Type="UnbuildablePlates">
+        <Flag Index="HeightAbsolute" Value="1"/>
+        <Flag Index="ForcePlacement" Value="1"/>
+        <Flag Index="NoDoodadFootprint" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="2066608805" Variation="5" Position="14.1787,14.7756,7.9987" Rotation="5.133" Scale="0.5,0.5,0.5" Type="UmojanLabWallDebris">
         <Flag Index="HeightAbsolute" Value="1"/>
@@ -443,10 +489,10 @@
         <Flag Index="ForcePlacement" Value="1"/>
         <Flag Index="NoDoodadFootprint" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="919271720" Position="23.801,12.0375,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
+    <ObjectDoodad Id="919271720" Position="23.799,12.0234,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="2061303815" Variation="1" Position="26.603,14.8635,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
+    <ObjectDoodad Id="2061303815" Position="26.6005,14.8166,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="566292811" Variation="1" Position="16.5,18,5.88" Rotation="3.9267" Scale="1,1,1" Type="Korhal_Platform_PlateWall">
@@ -473,7 +519,7 @@
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="678149656" Variation="11" Position="16.3156,10.4311,8.9987" Rotation="2.356" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+    <ObjectDoodad Id="678149656" Variation="8" Position="16.3156,10.4311,8.999" Rotation="2.356" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
@@ -482,10 +528,14 @@
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="884769559" Variation="1" Position="28.4558,16.7055,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
+    <ObjectDoodad Id="884769559" Position="28.4687,16.6833,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="251369018" Position="17.0698,14.73,7.9987" Rotation="0.117" Scale="0.4,0.4,0.4" Type="UmojanLabDebrisDoodad">
+    <ObjectDoodad Id="1643112448" Variation="11" Position="31.7497,14.2224,9.0617" Rotation="3.9267" Scale="0.5,0.5,0.5" Type="UmojanLabWallPanel1High">
+        <Flag Index="HeightOffset" Value="1"/>
+        <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="251369018" Position="17.0698,14.73,7.9985" Rotation="0.1166" Scale="0.3996,0.3996,0.3996" Type="UmojanLabDebrisDoodad">
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
         <Flag Index="NoDoodadFootprint" Value="1"/>
@@ -498,15 +548,15 @@
         <Flag Index="ForcePlacement" Value="1"/>
         <Flag Index="NoDoodadFootprint" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="1761787976" Position="26.2421,3.3806,16.8691" Rotation="3.7658" Scale="0.5998,1.2,0.4" Type="SpacePlatformCablesLarge">
-        <Flag Index="HeightOffset" Value="1"/>
-        <Flag Index="HeightAbsolute" Value="1"/>
-    </ObjectDoodad>
     <ObjectDoodad Id="1162269234" Position="14.038,15.339,7.9987" Rotation="0.7851" Scale="0.4,0.4,0.4" Type="CastanarStasisTubeWallDestroyed">
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="364182407" Variation="1" Position="25.6765,13.9252,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
+    <ObjectDoodad Id="1406628028" Position="30.2263,21.4128,8.1564" Rotation="6.0703" Scale="1.168,1.168,1.168" Type="BrokenPlating">
+        <Flag Index="HeightOffset" Value="1"/>
+        <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="364182407" Position="25.6684,13.8874,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="1717544756" Variation="13" Position="18.0375,16.181,5.8891" Scale="0.5,0.5,0.5" Type="CompoundSewers_FuelingPipes">
@@ -520,7 +570,7 @@
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="930012959" Variation="1" Position="24.755,12.998,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
+    <ObjectDoodad Id="930012959" Position="24.7331,12.9555,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="DOM_Walls_Interior">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="1574998503" Variation="1" Position="22.1245,16.381,7.9995" Rotation="0.7851" Scale="0.5,0.5,0.5" Type="UmojanLabLabGate">
@@ -528,7 +578,7 @@
         <Flag Index="ForcePlacement" Value="1"/>
         <Flag Index="NoDoodadFootprint" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="532579028" Variation="4" Position="29.3271,21.8901,8.1525" Rotation="2.7717" Scale="1.1682,1.1682,1.1682" Type="BrokenPlating">
+    <ObjectDoodad Id="532579028" Variation="4" Position="29.3271,21.8901,8.0122" Rotation="2.7717" Scale="1.1682,1.1682,1.1682" Type="BrokenPlating">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
@@ -538,5 +588,6 @@
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
+    <ObjectPoint Id="1597877810" Position="21.118,12.3237,0" Scale="1,1,1" Type="Normal" Name="Shuttle_CargoControl" Color="0,0,0,0"/>
     <ObjectPoint Id="932730890" Position="21.7458,18.2236,0" Scale="1,1,1" Type="Normal" Name="Shuttle_InfirmaryControl" Color="0,0,0,0"/>
 </PlacedObjects>

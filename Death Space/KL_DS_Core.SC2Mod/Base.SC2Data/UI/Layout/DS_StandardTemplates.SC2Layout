@@ -1,9 +1,81 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Desc>
-    <Frame type="Frame" name="GameuI/UIContainer/FullscreenUpperContainer" file="GameUI">
+    <Frame type="Frame" name="StandardFrame">
 
-        <Frame type="Frame" name="DSUIContainer">
-            <Anchor relative="$parent"/>
+        <Frame type="Image" name="DarkBackround">
+            <Anchor relative="$parent/Background"/>
+
+            <Color val="000000"/>
+            <Alpha val="220"/>
+        </Frame>
+
+        <Frame type="Image" name="Background">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="5"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="-5"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="5"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-5"/>
+
+            <TextureType val="NineSlice"/>
+            <Texture val="Assets\Textures\ui_nova_equipmentupgrades_paperdollwindow_bg.dds"/>
+        </Frame>
+
+        <Frame type="Image" name="CornerTopLeft">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Width val="18"/>
+            <Height val="19"/>
+            <Texture val="Assets/Textures/ui_nova_equipmentupgrades_Paperdollwindow_flair_cornerbracket.dds"/>
+            <Color val="255,255,255"/>
+        </Frame>
+                    
+        <Frame type="Image" name="CornerTopRight">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+            <Width val="18"/>
+            <Height val="19"/>
+            <Texture val="Assets/Textures/ui_nova_equipmentupgrades_Paperdollwindow_flair_cornerbracket.dds"/>
+            <TextureCoords top="0" left="1" bottom="1" right="0" layer="0"/>
+            <Color val="255,255,255"/>
+        </Frame>
+                    
+        <Frame type="Image" name="CornerBottomLeft">
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Width val="18"/>
+            <Height val="19"/>
+            <Texture val="Assets/Textures/ui_nova_equipmentupgrades_Paperdollwindow_flair_cornerbracket.dds"/>
+            <Color val="255,255,255"/>
+            <TextureCoords top="1" left="0" bottom="0" right="1" layer="0"/>
+        </Frame>
+                    
+        <Frame type="Image" name="CornerBottomRight">
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+            <Width val="18"/>
+            <Height val="19"/>
+
+            <Texture val="Assets/Textures/ui_nova_equipmentupgrades_Paperdollwindow_flair_cornerbracket.dds"/>
+            <Color val="255,255,255"/>
+            <TextureCoords top="1" left="1" bottom="0" right="0" layer="0"/>
+        </Frame>
+
+        <Frame type="Image" name="TitleHeader">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="14"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="14"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-14"/>
+            <Height val="40"/>
+            <Color val="83,167,132"/>
+            <Alpha val="50"/>
+        </Frame>
+
+        <Frame type="Label" name="TitleLabel">
+            <Anchor side="Top" relative="$parent/TitleHeader" pos="Mid" offset="0"/>
+            <Anchor side="Bottom" relative="$parent/TitleHeader" pos="Mid" offset="0"/>
+            <Anchor side="Left" relative="$parent/TitleHeader" pos="Mid" offset="0"/>
+            <Anchor side="Right" relative="$parent/TitleHeader" pos="Mid" offset="0"/>
+
+            <Style val="SwarmCampaignScoreScreenTitle"/>
+            <Text val="Title"/>
         </Frame>
     </Frame>
 </Desc>
