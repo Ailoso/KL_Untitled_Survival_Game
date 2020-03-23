@@ -4,18 +4,42 @@
         <Width val="115"/>
         <Height val="143"/>
         <HitTestFrame val="HitTestFrame"/>
+        <DisabledAlpha val="255"/>
+
+        <Frame type="Label" name="QuantityLabel">
+            <Anchor side="Top" relative="$parent/QuantityFrame" pos="Mid" offset="0"/>
+            <Anchor side="Bottom" relative="$parent/QuantityFrame" pos="Mid" offset="0"/>
+            <Anchor side="Left" relative="$parent/QuantityFrame" pos="Mid" offset="0"/>
+            <Anchor side="Right" relative="$parent/QuantityFrame" pos="Mid" offset="0"/>
+
+            <Text val="0"/>
+            <Visible val="{$parent/QuantityFrame/@Visible}"/>
+            <DisabledAlpha val="255"/>
+        </Frame>
+
+        <Frame type="Image" name="QuantityFrame">
+            <Anchor side="Bottom" relative="$parent/NormalImage" pos="Max" offset="-12"/>
+            <Anchor side="Right" relative="$parent/NormalImage" pos="Max" offset="-7"/>
+
+            <Width val="40"/>
+            <Height val="25"/>
+            <Visible val="False"/>
+            <Color val="83,167,132"/>
+            <Alpha val="50"/>
+            <DesaturateOnDisable val="False"/>
+        </Frame>
 
         <Frame type="Image" name="Icon">
             <Anchor side="Top" relative="$parent/NormalImage" pos="Mid" offset="0"/>
             <Anchor side="Bottom" relative="$parent/NormalImage" pos="Mid" offset="0"/>
             <Anchor side="Left" relative="$parent/NormalImage" pos="Mid" offset="0"/>
             <Anchor side="Right" relative="$parent/NormalImage" pos="Mid" offset="0"/>
+
             <Width val="90"/>
             <Height val="90"/>
             <ColorAdjustMode val="Colorize"/>
             <AdjustmentColor val="111,144,122"/>
             <ImageMaskTexture val="Assets/Textures/ui_nova_armyupgrades_upgradeiconmask.dds"/>
-
             <Texture val="Assets\Textures\icon-mineral-nobg.dds"/>
         </Frame>
         
@@ -23,16 +47,20 @@
             <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
             <Anchor side="Left" relative="$parent" pos="Mid" offset="0"/>
             <Anchor side="Right" relative="$parent" pos="Mid" offset="0"/>
+
             <Texture val="Assets\Textures\ui_nova_equipmentupgrades_carditemiconframe_green_normal.dds"/>
             <Alpha val="255"/>
+            <DesaturateOnDisable val="False"/>
         </Frame>
         
         <Frame type="Image" name="HoverImage">
             <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
             <Anchor side="Left" relative="$parent" pos="Mid" offset="0"/>
             <Anchor side="Right" relative="$parent" pos="Mid" offset="0"/>
+
             <Texture val="Assets\Textures\ui_nova_equipmentupgrades_carditemiconframe_green_over.dds"/>
             <Alpha val="255"/>
+            <DesaturateOnDisable val="False"/>
         </Frame>
 
         <Frame type="Frame" name="HitTestFrame">
@@ -52,13 +80,19 @@
         
             <State name="Empty">
                 <Action type="SetProperty" frame="$this/Icon" Visible="False"/>
+                <Action type="SetProperty" frame="$this" Enabled="False"/>
             </State>
         </StateGroup>
     </Frame>
 
-    <Frame type="Frame" name="CharacterFrameTemplate" template="DS_StandardTemplates/StandardFrame">
+    <Frame type="Frame" name="PlayerFrameTemplate" template="DS_StandardTemplates/StandardFrame">
         <Width val="585"/>
         <Height val="950"/>
+
+        <Frame type="Frame" name="characterContainer">
+
+            
+        </Frame>
 
         <Frame type="Label" name="TitleLabel">
             <Text val="Character"/>

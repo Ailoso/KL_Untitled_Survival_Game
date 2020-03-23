@@ -30,4 +30,11 @@
             <radius value="1.1523"/>
         </shape>
     </region>
+    <region id="5">
+        <name value="Shuttle_CargoApproach"/>
+        <shape type="circle">
+            <center value="21.0612,12.6137"/>
+            <radius value="1.1523"/>
+        </shape>
+    </region>
 </Regions>

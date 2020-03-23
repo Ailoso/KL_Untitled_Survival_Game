@@ -2,9 +2,18 @@
 <Desc>
     <Frame type="Frame" name="GameUI/UIContainer/FullscreenUpperContainer" file="GameUI">
 
-        <Frame type="Frame" name="InventroyFrame" template="DS_InventoryTemplates/CharacterFrameTemplate">
-            <Anchor side="Top" relative="$parent" pos="Min" offset="155"/>
-            <Anchor side="Right" relative="$parent" pos="Max" offset="-300"/>
+        <Frame type="Frame" name="DSGameUI">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+
+            <Frame type="Frame" name="PlayerFrame" template="DS_InventoryTemplates/PlayerFrameTemplate">
+                <Anchor side="Top" relative="$parent" pos="Min" offset="155"/>
+                <Anchor side="Right" relative="$parent" pos="Max" offset="-300"/>
+
+                <Visible val="False"/>
+            </Frame>
         </Frame>
     </Frame>
 </Desc>

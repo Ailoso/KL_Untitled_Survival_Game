@@ -58,24 +58,5 @@
             <Color val="255,255,255"/>
             <TextureCoords top="1" left="1" bottom="0" right="0" layer="0"/>
         </Frame>
-
-        <Frame type="Image" name="TitleHeader">
-            <Anchor side="Top" relative="$parent" pos="Min" offset="14"/>
-            <Anchor side="Left" relative="$parent" pos="Min" offset="14"/>
-            <Anchor side="Right" relative="$parent" pos="Max" offset="-14"/>
-            <Height val="40"/>
-            <Color val="83,167,132"/>
-            <Alpha val="50"/>
-        </Frame>
-
-        <Frame type="Label" name="TitleLabel">
-            <Anchor side="Top" relative="$parent/TitleHeader" pos="Mid" offset="0"/>
-            <Anchor side="Bottom" relative="$parent/TitleHeader" pos="Mid" offset="0"/>
-            <Anchor side="Left" relative="$parent/TitleHeader" pos="Mid" offset="0"/>
-            <Anchor side="Right" relative="$parent/TitleHeader" pos="Mid" offset="0"/>
-
-            <Style val="SwarmCampaignScoreScreenTitle"/>
-            <Text val="Title"/>
-        </Frame>
     </Frame>
 </Desc>

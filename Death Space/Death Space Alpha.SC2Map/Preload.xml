@@ -2,15 +2,19 @@
 <Preload>
 <Actor id="SYSTEM_ActorConfig"/>
 <Actor id="LightOmniWhiteLarge"/>
+<Actor id="BattleStation_Floor_Interrior" Variations="0,4"/>
 <Actor id="Blast_Craters" Variations="0,2"/>
 <Actor id="BrokenPlating" Variations="0,1,2,4"/>
 <Actor id="CompoundSewers_FuelingPipes" Variations="13"/>
 <Actor id="DOM_Groundlights" Variations="1"/>
 <Actor id="DOM_Walls_Caps_Interior" Variations="4,5"/>
 <Actor id="DOM_Walls_Interior" Variations="0,6"/>
+<Actor id="GenericFire_Medium_Area"/>
+<Actor id="HybridWallPanel2High" Variations="7"/>
+<Actor id="HybridWallPanelTall" Variations="2"/>
+<Actor id="Korhal_Platform_Debris" Variations="0,1,2,3,4,5"/>
+<Actor id="Korhal_Platform_Pipes" Variations="7"/>
 <Actor id="Korhal_Platform_PlateWall" Variations="0,1"/>
-<Actor id="SpacePrisonPlatformScaffold" Variations="0"/>
-<Actor id="UmojanLabAlarms"/>
 <Actor id="UmojanLabDebrisDoodad" Variations="0,1,4"/>
 <Actor id="UmojanLabGlassWallPanel" Variations="0"/>
 <Actor id="UmojanLabLabGate" Variations="1"/>
@@ -23,7 +27,6 @@
 <Actor id="CastanarStasisTubeDebris" Variations="1"/>
 <Actor id="CastanarStasisTubeWall" Variations="2"/>
 <Actor id="FireMedium"/>
-<Actor id="MetalGateDiagonal"/>
 <Actor id="InstallationRoof" Variations="0"/>
 <Actor id="CastanarStasisTubeWallDestroyed" Variations="0,1"/>
 <Actor id="UmojanLabCrashSiteSmallDoodad"/>
